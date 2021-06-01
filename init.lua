@@ -192,8 +192,7 @@ minetest.register_node("hades_xocean:sand_with_kelp", {
 					not minetest.is_protected(pos_top, player_name) then
 				minetest.set_node(pos, {name = "default:sand_with_kelp",
 					param2 = height * 16})
-				if not (creative and creative.is_enabled_for
-						and creative.is_enabled_for(player_name)) then
+				if not (minetest.is_creative_enabled(player_name)) then
 					itemstack:take_item()
 				end
 			else
@@ -206,7 +205,7 @@ minetest.register_node("hades_xocean:sand_with_kelp", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		minetest.set_node(pos, {name = "default:sand"})
+		minetest.set_node(pos, {name = "hades_default:sand"})
 	end
 })
 minetest.register_craft({
@@ -276,7 +275,7 @@ minetest.register_node("hades_xocean:seagrass", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:seagrass"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 
@@ -284,7 +283,7 @@ minetest.register_node("hades_xocean:seagrass", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		minetest.set_node(pos, {name = "default:sand"})
+		minetest.set_node(pos, {name = "hades_default:sand"})
 	end,
 })
 minetest.register_craftitem("hades_xocean:fish_edible", {
@@ -338,7 +337,7 @@ minetest.register_node("hades_xocean:pickle", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:pickle"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 
@@ -346,7 +345,7 @@ minetest.register_node("hades_xocean:pickle", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		minetest.set_node(pos, {name = "default:sand"})
+		minetest.set_node(pos, {name = "hades_default:sand"})
 	end,
 })
 ---Corals
@@ -403,7 +402,7 @@ minetest.register_node("hades_xocean:coral_pink", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:coral_pink"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 
@@ -465,7 +464,7 @@ minetest.register_node("hades_xocean:skeleton_brain", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_brain"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 
@@ -530,7 +529,7 @@ minetest.register_node("hades_xocean:coral_cyan", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:coral_cyan"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 
@@ -592,7 +591,7 @@ minetest.register_node("hades_xocean:skeleton_tube", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_tube"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 
@@ -656,7 +655,7 @@ minetest.register_node("hades_xocean:bubble", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:bubble"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 
@@ -719,7 +718,7 @@ minetest.register_node("hades_xocean:skeleton_bubble", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_bubble"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 
@@ -784,7 +783,7 @@ minetest.register_node("hades_xocean:horn", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:horn"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 
@@ -793,7 +792,7 @@ minetest.register_node("hades_xocean:horn", {
 
 	after_destruct  = function(pos, oldnode)
 		-- minetest.set_node(pos, {name = "hades_xocean:horn_block"})
-		minetest.set_node(pos, {name = "hades_xocean:horn"})
+		--minetest.set_node(pos, {name = "hades_xocean:horn"})
 		minetest.set_node(pos, {name = "hades_xocean:coral_brown"})
 	end,
 })
@@ -851,7 +850,7 @@ minetest.register_node("hades_xocean:skeleton_horn", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_horn"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 
@@ -917,7 +916,7 @@ minetest.register_node("hades_xocean:fire", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:fire"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 
@@ -979,7 +978,7 @@ minetest.register_node("hades_xocean:skeleton_fire", {
 		end
 
 		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_fire"})
-		if not (creative and creative.is_enabled_for(player_name)) then
+		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
 

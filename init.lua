@@ -2,28 +2,32 @@
 -- Let the server console know the initialization is beginning.
 core.log("[Xocean] Initialization begins...")
 
-minetest.register_node("xocean:ocean_cobble", {
+local modpath = minetest.get_modpath(minetest.get_current_modname())
+
+
+minetest.register_node("hades_xocean:ocean_cobble", {
 	description = "Ocean Cobblestone",
 	tiles = {"xocean_cobble.png"},
 	groups = {cracky=3},
 })
 
-minetest.register_node("xocean:ocean_stone", {
+minetest.register_node("hades_xocean:ocean_stone", {
 	description = "Ocean Stone",
 	tiles = {"xocean_stone.png"},
 	groups = {cracky=3},
-	drop= "xocean:ocean_cobble",
+	drop= "hades_xocean:ocean_cobble",
 })
 
 minetest.register_craft({
 	type = "cooking",
-	output = "xocean:ocean_stone",
-	recipe = "xocean:ocean_cobble",
+	output = "hades_xocean:ocean_stone",
+	recipe = "hades_xocean:ocean_cobble",
 })
+--[[
 ---Spawn the stone
 minetest.register_ore({
 		ore_type        = "blob",
-		ore             = "xocean:ocean_stone",
+		ore             = "hades_xocean:ocean_stone",
 		wherein         = {"default:sand"},
 		clust_scarcity  = 32 * 32 * 32,
 		clust_size      = 8,
@@ -39,64 +43,65 @@ minetest.register_ore({
 			persist = 0.0
 		},
 	})
+--]]
 
-minetest.register_node("xocean:ocean_carved", {
+minetest.register_node("hades_xocean:ocean_carved", {
 	description = "Carved Ocean Stone",
 	tiles = {"xocean_carved.png"},
 	groups = {cracky=2},
 })
 
 minetest.register_craft({
-	output = '"xocean:ocean_carved" 4',
+	output = '"hades_xocean:ocean_carved" 4',
 	recipe = {
-		{'xocean:ocean_stone', 'xocean:ocean_stone',},
-		{'xocean:ocean_stone', 'xocean:ocean_stone',},
+		{'hades_xocean:ocean_stone', 'hades_xocean:ocean_stone',},
+		{'hades_xocean:ocean_stone', 'hades_xocean:ocean_stone',},
 		},
 })
 
-minetest.register_node("xocean:ocean_circular", {
+minetest.register_node("hades_xocean:ocean_circular", {
 	description = "Circular Ocean Stone",
 	tiles = {"xocean_circular.png"},
 	groups = {cracky=2},
 })
 
 minetest.register_craft({
-	output = '"xocean:ocean_circular" 4',
+	output = '"hades_xocean:ocean_circular" 4',
 	recipe = {
-		{'xocean:ocean_carved', 'xocean:ocean_carved',},
-		{'xocean:ocean_carved', 'xocean:ocean_carved',},
+		{'hades_xocean:ocean_carved', 'hades_xocean:ocean_carved',},
+		{'hades_xocean:ocean_carved', 'hades_xocean:ocean_carved',},
 		},
 })
 
-minetest.register_node("xocean:ocean_pillar", {
+minetest.register_node("hades_xocean:ocean_pillar", {
 	description = "Ocean Pillar",
 	tiles = {"xocean_pillar.png"},
 	groups = {cracky=2},
 })
 
 minetest.register_craft({
-	output = '"xocean:ocean_pillar" 4',
+	output = '"hades_xocean:ocean_pillar" 4',
 	recipe = {
-		{'xocean:ocean_brick', 'xocean:ocean_brick',},
-		{'xocean:ocean_brick', 'xocean:ocean_brick',},
+		{'hades_xocean:ocean_brick', 'hades_xocean:ocean_brick',},
+		{'hades_xocean:ocean_brick', 'hades_xocean:ocean_brick',},
 		},
 })
 
-minetest.register_node("xocean:ocean_brick", {
+minetest.register_node("hades_xocean:ocean_brick", {
 	description = "Ocean Brick",
 	tiles = {"xocean_brick.png"},
 	groups = {cracky=2},
 })
 
 minetest.register_craft({
-	output = '"xocean:ocean_brick" 4',
+	output = '"hades_xocean:ocean_brick" 4',
 	recipe = {
-		{'xocean:ocean_cobble', 'xocean:ocean_cobble',},
-		{'xocean:ocean_cobble', 'xocean:ocean_cobble',},
+		{'hades_xocean:ocean_cobble', 'hades_xocean:ocean_cobble',},
+		{'hades_xocean:ocean_cobble', 'hades_xocean:ocean_cobble',},
 		},
 })
 
-minetest.register_node("xocean:sea_lantern", {
+minetest.register_node("hades_xocean:sea_lantern", {
     description = "Sea Lantern",
     drawtype = "glasslike",
 	light_source = 14,
@@ -104,35 +109,36 @@ minetest.register_node("xocean:sea_lantern", {
     paramtype = "light",
     is_ground_content = true,
     sunlight_propagates = true,
-    sounds = default.node_sound_glass_defaults(),
+    sounds = hades_sounds.node_sound_glass_defaults(),
     groups = {cracky=3,oddly_breakable_by_hand=3},
 })
 
 minetest.register_craft({
-	output = '"xocean:sea_lantern" 4',
+	output = '"hades_xocean:sea_lantern" 4',
 	recipe = {
-		{'default:torch', 'default:glass', 'default:torch', },
-		{'default:glass', 'bucket:bucket_water', 'default:glass', },
-		{'default:torch', 'default:glass', 'default:torch', },
+		{'hades_core:torch', 'hades_core:glass', 'hades_core:torch', },
+		{'hades_core:glass', 'hades_bucket:bucket_water', 'hades_core:glass', },
+		{'hades_core:torch', 'hades_core:glass', 'hades_core:torch', },
 		},
-		replacements = {{ "bucket:bucket_water", "bucket:bucket_empty"}}
+		replacements = {{ "hades_bucket:bucket_water", "hades_bucket:bucket_empty"}}
 })
 ---Sea stuff
-minetest.register_node("xocean:kelp_block", {
+minetest.register_node("hades_xocean:kelp_block", {
 	description = "Dried Kelp Block",
 	tiles = {"xocean_kelp_block.png"},
 	groups = {snappy=3},
-	drop= "xocean:kelp 9",
+	drop= "hades_xocean:kelp 9",
 })
 minetest.register_craft({
-	output = '"xocean:kelp_block" 1',
+	output = '"hades_xocean:kelp_block" 1',
 	recipe = {
-		{'xocean:kelp', 'xocean:kelp', 'xocean:kelp', },
-		{'xocean:kelp', 'xocean:kelp', 'xocean:kelp', },
-		{'xocean:kelp', 'xocean:kelp', 'xocean:kelp', },
+		{'hades_xocean:kelp', 'hades_xocean:kelp', 'hades_xocean:kelp', },
+		{'hades_xocean:kelp', 'hades_xocean:kelp', 'hades_xocean:kelp', },
+		{'hades_xocean:kelp', 'hades_xocean:kelp', 'hades_xocean:kelp', },
 		},
 })
-minetest.override_item("default:sand_with_kelp", {
+--minetest.override_item("default:sand_with_kelp", {
+minetest.register_node("hades_xocean:sand_with_kelp", {
 	description = "Kelp",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -152,7 +158,7 @@ minetest.override_item("default:sand_with_kelp", {
 	},
 	node_dig_prediction = "default:sand",
 	node_placement_prediction = "",
-	sounds = default.node_sound_sand_defaults({
+	sounds = hades_sounds.node_sound_sand_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -205,27 +211,27 @@ minetest.override_item("default:sand_with_kelp", {
 })
 minetest.register_craft({
 	type = "cooking",
-	output = "xocean:kelp",
-	recipe = "default:sand_with_kelp",
+	output = "hades_xocean:kelp",
+	recipe = "hades_xocean:sand_with_kelp",
 })
-minetest.register_craftitem("xocean:kelp", {
+minetest.register_craftitem("hades_xocean:kelp", {
 	description = "Dried Kelp",
 	on_use = minetest.item_eat(1),
 	inventory_image = "xocean_dried_kelp.png",
 })
-minetest.register_craftitem("xocean:sushi", {
+minetest.register_craftitem("hades_xocean:sushi", {
 	description = "Sushi",
 	on_use = minetest.item_eat(6),
 	inventory_image = "xocean_sushi.png",
 })
 minetest.register_craft({
-	output = '"xocean:sushi" 1',
+	output = '"hades_xocean:sushi" 1',
 	recipe = {
-		{'xocean:fish_edible'},
-		{'xocean:kelp' },
+		{'hades_xocean:fish_edible'},
+		{'hades_xocean:kelp' },
 		},
 })
-minetest.register_node("xocean:seagrass", {
+minetest.register_node("hades_xocean:seagrass", {
 	description = "Seagrass",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -243,7 +249,7 @@ minetest.register_node("xocean:seagrass", {
 	},
 	node_dig_prediction = "default:sand",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -258,7 +264,7 @@ minetest.register_node("xocean:seagrass", {
 		local pos_above = pointed_thing.above
 
 		if minetest.get_node(pos_under).name ~= "default:sand" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
 
@@ -269,7 +275,7 @@ minetest.register_node("xocean:seagrass", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "xocean:seagrass"})
+		minetest.set_node(pos_under, {name = "hades_xocean:seagrass"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -281,12 +287,12 @@ minetest.register_node("xocean:seagrass", {
 		minetest.set_node(pos, {name = "default:sand"})
 	end,
 })
-minetest.register_craftitem("xocean:fish_edible", {
+minetest.register_craftitem("hades_xocean:fish_edible", {
 	description = "Tropical Fish",
 	on_use = minetest.item_eat(3),
 	inventory_image = "xocean_fish_edible.png",
 })
-minetest.register_node("xocean:pickle", {
+minetest.register_node("hades_xocean:pickle", {
 	description = "Sea Pickle",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -305,7 +311,7 @@ minetest.register_node("xocean:pickle", {
 	light_source = 3,
 	node_dig_prediction = "default:sand",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -320,7 +326,7 @@ minetest.register_node("xocean:pickle", {
 		local pos_above = pointed_thing.above
 
 		if minetest.get_node(pos_under).name ~= "default:sand" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
 
@@ -331,7 +337,7 @@ minetest.register_node("xocean:pickle", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "xocean:pickle"})
+		minetest.set_node(pos_under, {name = "hades_xocean:pickle"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -344,14 +350,15 @@ minetest.register_node("xocean:pickle", {
 	end,
 })
 ---Corals
-minetest.register_node("xocean:brain_block", {
+minetest.register_node("hades_xocean:brain_block", {
 	description = "Brain Coral Block",
 	tiles = {"xocean_coral_brain.png"},
 	groups = {cracky = 3},
-	drop = "xocean:brain_skeleton",
-	sounds = default.node_sound_stone_defaults(),
+	drop = "hades_xocean:brain_skeleton",
+	sounds = hades_sounds.node_sound_stone_defaults(),
 })
-minetest.override_item("default:coral_pink", {
+--minetest.override_item("default:coral_pink", {
+minetest.register_node("hades_xocean:coral_pink", {
 	description = "Brain Coral",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -367,9 +374,9 @@ minetest.override_item("default:coral_pink", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
-	node_dig_prediction = "xocean:brain_block",
+	node_dig_prediction = "hades_xocean:brain_block",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -383,8 +390,8 @@ minetest.override_item("default:coral_pink", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		if minetest.get_node(pos_under).name ~= "xocean:brain_block" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+		if minetest.get_node(pos_under).name ~= "hades_xocean:brain_block" or
+				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
 
@@ -395,7 +402,7 @@ minetest.override_item("default:coral_pink", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "default:coral_pink"})
+		minetest.set_node(pos_under, {name = "hades_xocean:coral_pink"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -404,16 +411,16 @@ minetest.override_item("default:coral_pink", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		minetest.set_node(pos, {name = "xocean:brain_block"})
+		minetest.set_node(pos, {name = "hades_xocean:brain_block"})
 	end,
 })
-minetest.register_node("xocean:brain_skeleton", {
+minetest.register_node("hades_xocean:brain_skeleton", {
 	description = "Brain Coral Skeleton Block",
 	tiles = {"xocean_coral_brain_skeleton.png"},
 	groups = {cracky = 3},
-	sounds = default.node_sound_stone_defaults(),
+	sounds = hades_sounds.node_sound_stone_defaults(),
 })
-minetest.register_node("xocean:skeleton_brain", {
+minetest.register_node("hades_xocean:skeleton_brain", {
 	description = "Brain Coral Skeleton",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -429,9 +436,9 @@ minetest.register_node("xocean:skeleton_brain", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
-	node_dig_prediction = "xocean:brain_skeleton",
+	node_dig_prediction = "hades_xocean:brain_skeleton",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -445,7 +452,7 @@ minetest.register_node("xocean:skeleton_brain", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		if minetest.get_node(pos_under).name ~= "xocean:brain_skeleton" or
+		if minetest.get_node(pos_under).name ~= "hades_xocean:brain_skeleton" or
 				minetest.get_node(pos_above).name ~= "default:water_source" then
 			return itemstack
 		end
@@ -457,7 +464,7 @@ minetest.register_node("xocean:skeleton_brain", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "xocean:skeleton_brain"})
+		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_brain"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -466,17 +473,18 @@ minetest.register_node("xocean:skeleton_brain", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		minetest.set_node(pos, {name = "xocean:brain_skeleton"})
+		minetest.set_node(pos, {name = "hades_xocean:brain_skeleton"})
 	end,
 })
-minetest.register_node("xocean:tube_block", {
+minetest.register_node("hades_xocean:tube_block", {
 	description = "Tube Coral Block",
 	tiles = {"xocean_coral_tube.png"},
 	groups = {cracky = 3},
-	drop = "xocean:tube_skeleton",
-	sounds = default.node_sound_stone_defaults(),
+	drop = "hades_xocean:tube_skeleton",
+	sounds = hades_sounds.node_sound_stone_defaults(),
 })
-minetest.override_item("default:coral_cyan", {
+--minetest.override_item("default:coral_cyan", {
+minetest.register_node("hades_xocean:coral_cyan", {
 	description = "Tube Coral",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -492,10 +500,10 @@ minetest.override_item("default:coral_cyan", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
-	drop = "xocean:skeleton_tube",
-	node_dig_prediction = "xocean:tube_block",
+	drop = "hades_xocean:skeleton_tube",
+	node_dig_prediction = "hades_xocean:tube_block",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -509,7 +517,7 @@ minetest.override_item("default:coral_cyan", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		if minetest.get_node(pos_under).name ~= "xocean:tube_block" or
+		if minetest.get_node(pos_under).name ~= "hades_xocean:tube_block" or
 				minetest.get_node(pos_above).name ~= "default:water_source" then
 			return itemstack
 		end
@@ -521,7 +529,7 @@ minetest.override_item("default:coral_cyan", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "default:coral_cyan"})
+		minetest.set_node(pos_under, {name = "hades_xocean:coral_cyan"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -530,16 +538,16 @@ minetest.override_item("default:coral_cyan", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		minetest.set_node(pos, {name = "xocean:tube_block"})
+		minetest.set_node(pos, {name = "hades_xocean:tube_block"})
 	end,
 })
-minetest.register_node("xocean:tube_skeleton", {
+minetest.register_node("hades_xocean:tube_skeleton", {
 	description = "Tube Coral Skeleton Block",
 	tiles = {"xocean_coral_tube_skeleton.png"},
 	groups = {cracky = 3},
-	sounds = default.node_sound_stone_defaults(),
+	sounds = hades_sounds.node_sound_stone_defaults(),
 })
-minetest.register_node("xocean:skeleton_tube", {
+minetest.register_node("hades_xocean:skeleton_tube", {
 	description = "Tube Coral Skeleton",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -555,9 +563,9 @@ minetest.register_node("xocean:skeleton_tube", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
-	node_dig_prediction = "xocean:tube_skeleton",
+	node_dig_prediction = "hades_xocean:tube_skeleton",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -571,7 +579,7 @@ minetest.register_node("xocean:skeleton_tube", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		if minetest.get_node(pos_under).name ~= "xocean:tube_skeleton" or
+		if minetest.get_node(pos_under).name ~= "hades_xocean:tube_skeleton" or
 				minetest.get_node(pos_above).name ~= "default:water_source" then
 			return itemstack
 		end
@@ -583,7 +591,7 @@ minetest.register_node("xocean:skeleton_tube", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "xocean:skeleton_tube"})
+		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_tube"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -592,21 +600,21 @@ minetest.register_node("xocean:skeleton_tube", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		minetest.set_node(pos, {name = "xocean:tube_skeleton"})
+		minetest.set_node(pos, {name = "hades_xocean:tube_skeleton"})
 	end,
 })
-minetest.register_node("xocean:bubble_block", {
+minetest.register_node("hades_xocean:bubble_block", {
 	description = "Bubble Coral Block",
 	tiles = {"xocean_coral_bubble.png"},
 	groups = {cracky = 3},
-	drop = "xocean:bubble_skeleton",
-	sounds = default.node_sound_stone_defaults(),
+	drop = "hades_xocean:bubble_skeleton",
+	sounds = hades_sounds.node_sound_stone_defaults(),
 })
-minetest.register_node("xocean:bubble", {
+minetest.register_node("hades_xocean:bubble", {
 	description = "Bubble Coral",
 	drawtype = "plantlike_rooted",
 	waving = 1,
-	drop = "xocean:skeleton_bubble",
+	drop = "hades_xocean:skeleton_bubble",
 	paramtype = "light",
 	tiles = {"xocean_coral_bubble.png"},
 	special_tiles = {{name = "xocean_bubble.png", tileable_vertical = true}},
@@ -619,9 +627,9 @@ minetest.register_node("xocean:bubble", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
-	node_dig_prediction = "xocean:bubble_block",
+	node_dig_prediction = "hades_xocean:bubble_block",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -635,7 +643,7 @@ minetest.register_node("xocean:bubble", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		if minetest.get_node(pos_under).name ~= "xocean:bubble_block" or
+		if minetest.get_node(pos_under).name ~= "hades_xocean:bubble_block" or
 				minetest.get_node(pos_above).name ~= "default:water_source" then
 			return itemstack
 		end
@@ -647,7 +655,7 @@ minetest.register_node("xocean:bubble", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "xocean:bubble"})
+		minetest.set_node(pos_under, {name = "hades_xocean:bubble"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -656,16 +664,16 @@ minetest.register_node("xocean:bubble", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		minetest.set_node(pos, {name = "xocean:bubble_block"})
+		minetest.set_node(pos, {name = "hades_xocean:bubble_block"})
 	end,
 })
-minetest.register_node("xocean:bubble_skeleton", {
+minetest.register_node("hades_xocean:bubble_skeleton", {
 	description = "Bubble Coral Skeleton Block",
 	tiles = {"xocean_coral_bubble_skeleton.png"},
 	groups = {cracky = 3},
-	sounds = default.node_sound_stone_defaults(),
+	sounds = hades_sounds.node_sound_stone_defaults(),
 })
-minetest.register_node("xocean:skeleton_bubble", {
+minetest.register_node("hades_xocean:skeleton_bubble", {
 	description = "Bubble Coral Skeleton",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -681,10 +689,10 @@ minetest.register_node("xocean:skeleton_bubble", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
-	drop = "xocean:skeleton_bubble",
-	node_dig_prediction = "xocean:bubble_skeleton",
+	drop = "hades_xocean:skeleton_bubble",
+	node_dig_prediction = "hades_xocean:bubble_skeleton",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -698,7 +706,7 @@ minetest.register_node("xocean:skeleton_bubble", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		if minetest.get_node(pos_under).name ~= "xocean:bubble_skeleton" or
+		if minetest.get_node(pos_under).name ~= "hades_xocean:bubble_skeleton" or
 				minetest.get_node(pos_above).name ~= "default:water_source" then
 			return itemstack
 		end
@@ -710,7 +718,7 @@ minetest.register_node("xocean:skeleton_bubble", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "xocean:skeleton_bubble"})
+		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_bubble"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -719,17 +727,18 @@ minetest.register_node("xocean:skeleton_bubble", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		minetest.set_node(pos, {name = "xocean:bubble_skeleton"})
+		minetest.set_node(pos, {name = "hades_xocean:bubble_skeleton"})
 	end,
 })
-minetest.override_item("default:coral_brown", {
+--minetest.override_item("default:coral_brown", {
+minetest.register_node("hades_xocean:coral_brown", {
  	description = "Horn Coral Block",
 	tiles = {"xocean_coral_horn.png"},
 	groups = {cracky = 3},
-	drop = "default:coral_skeleton",
-	sounds = default.node_sound_stone_defaults(),
+	drop = "hades_xocean:coral_skeleton",
+	sounds = hades_sounds.node_sound_stone_defaults(),
 })
-minetest.register_node("xocean:horn", {
+minetest.register_node("hades_xocean:horn", {
 	description = "Horn Coral",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -738,7 +747,7 @@ minetest.register_node("xocean:horn", {
 	special_tiles = {{name = "xocean_horn.png", tileable_vertical = true}},
 	inventory_image = "xocean_horn.png",
 	groups = {snappy = 3},
-	drop = "xocean:skeleton_horn",
+	drop = "hades_xocean:skeleton_horn",
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -746,9 +755,9 @@ minetest.register_node("xocean:horn", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
-	node_dig_prediction = "default:coral_brown",
+	node_dig_prediction = "hades_xocean:coral_brown",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -762,8 +771,8 @@ minetest.register_node("xocean:horn", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		if minetest.get_node(pos_under).name ~= "default:coral_brown" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+		if minetest.get_node(pos_under).name ~= "hades_xocean:coral_brown" or
+				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
 
@@ -774,7 +783,7 @@ minetest.register_node("xocean:horn", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "xocean:horn"})
+		minetest.set_node(pos_under, {name = "hades_xocean:horn"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -783,18 +792,19 @@ minetest.register_node("xocean:horn", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		-- minetest.set_node(pos, {name = "xocean:horn_block"})
-		minetest.set_node(pos, {name = "xocean:horn"})
-		minetest.set_node(pos, {name = "default:coral_brown"})
+		-- minetest.set_node(pos, {name = "hades_xocean:horn_block"})
+		minetest.set_node(pos, {name = "hades_xocean:horn"})
+		minetest.set_node(pos, {name = "hades_xocean:coral_brown"})
 	end,
 })
-minetest.override_item("default:coral_skeleton", {
+--minetest.override_item("default:coral_skeleton", {
+minetest.register_node("hades_xocean:coral_skeleton", {
  	description = "Horn Coral Skeleton Block",
 	tiles = {"xocean_coral_horn_skeleton.png"},
 	groups = {cracky = 3},
-	sounds = default.node_sound_stone_defaults(),
+	sounds = hades_sounds.node_sound_stone_defaults(),
 })
-minetest.register_node("xocean:skeleton_horn", {
+minetest.register_node("hades_xocean:skeleton_horn", {
 	description = "Horn Coral Skeleton",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -810,10 +820,10 @@ minetest.register_node("xocean:skeleton_horn", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
-	-- drop = "xocean:skeleton:horn",
-	node_dig_prediction = "xocean:horn_skeleton",
+	-- drop = "hades_xocean:skeleton:horn",
+	node_dig_prediction = "hades_xocean:horn_skeleton",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -827,9 +837,9 @@ minetest.register_node("xocean:skeleton_horn", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		-- if minetest.get_node(pos_under).name ~= "xocean:horn_skeleton" or
-		if minetest.get_node(pos_under).name ~= "default:coral_skeleton" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+		-- if minetest.get_node(pos_under).name ~= "hades_xocean:horn_skeleton" or
+		if minetest.get_node(pos_under).name ~= "hades_xocean:coral_skeleton" or
+				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
 
@@ -840,7 +850,7 @@ minetest.register_node("xocean:skeleton_horn", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "xocean:skeleton_horn"})
+		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_horn"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -849,18 +859,19 @@ minetest.register_node("xocean:skeleton_horn", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		-- minetest.set_node(pos, {name = "xocean:horn_skeleton"})
-		minetest.set_node(pos, {name = "default:coral_skeleton"})
+		-- minetest.set_node(pos, {name = "hades_xocean:horn_skeleton"})
+		minetest.set_node(pos, {name = "hades_xocean:coral_skeleton"})
 	end,
 })
-minetest.override_item("default:coral_orange", {
+--minetest.override_item("default:coral_orange", {
+minetest.register_node("hades_xocean:coral_orange", {
  	description = "Fire Coral Block",
 	tiles = {"xocean_coral_fire.png"},
 	groups = {cracky = 3},
-	drop = "xocean:fire_skeleton",
-	sounds = default.node_sound_stone_defaults(),
+	drop = "hades_xocean:fire_skeleton",
+	sounds = hades_sounds.node_sound_stone_defaults(),
 })
-minetest.register_node("xocean:fire", {
+minetest.register_node("hades_xocean:fire", {
 	description = "Fire Coral",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -876,10 +887,10 @@ minetest.register_node("xocean:fire", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
-	drop = "xocean:skeleton_fire",
-	node_dig_prediction = "xocean:default:coral_orange",
+	drop = "hades_xocean:skeleton_fire",
+	node_dig_prediction = "hades_xocean:coral_orange",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -893,8 +904,8 @@ minetest.register_node("xocean:fire", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		if minetest.get_node(pos_under).name ~= "default:coral_orange" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+		if minetest.get_node(pos_under).name ~= "hades_xocean:coral_orange" or
+				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
 
@@ -905,7 +916,7 @@ minetest.register_node("xocean:fire", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "xocean:fire"})
+		minetest.set_node(pos_under, {name = "hades_xocean:fire"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -914,16 +925,16 @@ minetest.register_node("xocean:fire", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		minetest.set_node(pos, {name = "default:coral_orange"})
+		minetest.set_node(pos, {name = "hades_xocean:coral_orange"})
 	end,
 })
-minetest.register_node("xocean:fire_skeleton", {
+minetest.register_node("hades_xocean:fire_skeleton", {
  	description = "Fire Coral Skeleton Block",
 	tiles = {"xocean_coral_fire_skeleton.png"},
 	groups = {cracky = 3},
-	sounds = default.node_sound_stone_defaults(),
+	sounds = hades_sounds.node_sound_stone_defaults(),
 })
-minetest.register_node("xocean:skeleton_fire", {
+minetest.register_node("hades_xocean:skeleton_fire", {
 	description = "Fire Coral Skeleton",
 	drawtype = "plantlike_rooted",
 	waving = 1,
@@ -939,9 +950,9 @@ minetest.register_node("xocean:skeleton_fire", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
-	node_dig_prediction = "xocean:fire_skeleton",
+	node_dig_prediction = "hades_xocean:fire_skeleton",
 	node_placement_prediction = "",
-	sounds = default.node_sound_stone_defaults({
+	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
 		dug = {name = "default_grass_footstep", gain = 0.25},
 	}),
@@ -955,7 +966,7 @@ minetest.register_node("xocean:skeleton_fire", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		if minetest.get_node(pos_under).name ~= "xocean:fire_skeleton" or
+		if minetest.get_node(pos_under).name ~= "hades_xocean:fire_skeleton" or
 				minetest.get_node(pos_above).name ~= "default:water_source" then
 			return itemstack
 		end
@@ -967,7 +978,7 @@ minetest.register_node("xocean:skeleton_fire", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "xocean:skeleton_fire"})
+		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_fire"})
 		if not (creative and creative.is_enabled_for(player_name)) then
 			itemstack:take_item()
 		end
@@ -976,12 +987,13 @@ minetest.register_node("xocean:skeleton_fire", {
 	end,
 
 	after_destruct  = function(pos, oldnode)
-		minetest.set_node(pos, {name = "xocean:fire_skeleton"})
+		minetest.set_node(pos, {name = "hades_xocean:fire_skeleton"})
 	end,
 })
 ---Mapgen
+--[[
 minetest.register_decoration({
-		name = "xocean:brain",
+		name = "hades_xocean:brain",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1005,12 +1017,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/brain.mts",
+		schematic = modpath .. "/schems/brain.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 minetest.register_decoration({
-		name = "xocean:horn",
+		name = "hades_xocean:horn",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1034,12 +1046,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/horn.mts",
+		schematic = modpath .. "/schems/horn.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 minetest.register_decoration({
-		name = "xocean:bubble",
+		name = "hades_xocean:bubble",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1063,12 +1075,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/bubble.mts",
+		schematic = modpath .. "/schems/bubble.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 minetest.register_decoration({
-		name = "xocean:tube",
+		name = "hades_xocean:tube",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1092,12 +1104,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/tube.mts",
+		schematic = modpath .. "/schems/tube.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 minetest.register_decoration({
-		name = "xocean:fire",
+		name = "hades_xocean:fire",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1121,12 +1133,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/fire.mts",
+		schematic = modpath .. "/schems/fire.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 minetest.register_decoration({
-		name = "xocean:brain2",
+		name = "hades_xocean:brain2",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1150,12 +1162,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/brain2.mts",
+		schematic = modpath .. "/schems/brain2.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 minetest.register_decoration({
-		name = "xocean:horn2",
+		name = "hades_xocean:horn2",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1179,12 +1191,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/horn2.mts",
+		schematic = modpath .. "/schems/horn2.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 minetest.register_decoration({
-		name = "xocean:bubble2",
+		name = "hades_xocean:bubble2",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1208,12 +1220,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/bubble2.mts",
+		schematic = modpath .. "/schems/bubble2.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 minetest.register_decoration({
-		name = "xocean:tube2",
+		name = "hades_xocean:tube2",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1237,12 +1249,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/tube2.mts",
+		schematic = modpath .. "/schems/tube2.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 minetest.register_decoration({
-		name = "xocean:fire2",
+		name = "hades_xocean:fire2",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1266,12 +1278,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/fire2.mts",
+		schematic = modpath .. "/schems/fire2.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 minetest.register_decoration({
-		name = "xocean:tube3",
+		name = "hades_xocean:tube3",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1295,12 +1307,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/tube3.mts",
+		schematic = modpath .. "/schems/tube3.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 minetest.register_decoration({
-		name = "xocean:brain3",
+		name = "hades_xocean:brain3",
 		deco_type = "schematic",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1324,12 +1336,12 @@ minetest.register_decoration({
 		y_max = -6,
 		y_min = -16,
 		flags = "force_placement",
-		schematic = minetest.get_modpath("xocean") .. "/schems/brain3.mts",
+		schematic = modpath .. "/schems/brain3.mts",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:seagrass",
+		name = "hades_xocean:seagrass",
 		deco_type = "simple",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1353,14 +1365,14 @@ minetest.register_decoration({
 		y_max = -5,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "xocean:seagrass",
+		decoration = "hades_xocean:seagrass",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:fire_plant_dead",
+		name = "hades_xocean:fire_plant_dead",
 		deco_type = "simple",
-		place_on = {"xocean:brain_block","xocean:tube_block","default:coral_orange","default:coral_brown","xocean:bubble_block"},
+		place_on = {"hades_xocean:brain_block","hades_xocean:tube_block","hades_xocean:coral_orange","hades_xocean:coral_brown","hades_xocean:bubble_block"},
 		place_offset_y = -1,
 		sidelen = 16,
 		noise_params = {
@@ -1382,14 +1394,14 @@ minetest.register_decoration({
 		y_max = -5,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "xocean:skeleton_fire",
+		decoration = "hades_xocean:skeleton_fire",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:horn_plant_dead",
+		name = "hades_xocean:horn_plant_dead",
 		deco_type = "simple",
-		place_on = {"xocean:brain_block","xocean:tube_block","default:coral_orange","default:coral_brown","xocean:bubble_block"},
+		place_on = {"hades_xocean:brain_block","hades_xocean:tube_block","hades_xocean:coral_orange","hades_xocean:coral_brown","hades_xocean:bubble_block"},
 		place_offset_y = -1,
 		sidelen = 16,
 		noise_params = {
@@ -1411,14 +1423,14 @@ minetest.register_decoration({
 		y_max = -5,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "xocean:skeleton_horn",
+		decoration = "hades_xocean:skeleton_horn",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:bubble_plant_skeleton",
+		name = "hades_xocean:bubble_plant_skeleton",
 		deco_type = "simple",
-		place_on = {"xocean:brain_block","xocean:tube_block","default:coral_orange","default:coral_brown","xocean:bubble_block"},
+		place_on = {"hades_xocean:brain_block","hades_xocean:tube_block","hades_xocean:coral_orange","hades_xocean:coral_brown","hades_xocean:bubble_block"},
 		place_offset_y = -1,
 		sidelen = 16,
 		noise_params = {
@@ -1440,14 +1452,14 @@ minetest.register_decoration({
 		y_max = -5,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "xocean:skeleton_bubble",
+		decoration = "hades_xocean:skeleton_bubble",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:brain_plant_skeleton",
+		name = "hades_xocean:brain_plant_skeleton",
 		deco_type = "simple",
-		place_on = {"xocean:brain_block","xocean:tube_block","default:coral_orange","default:coral_brown","xocean:bubble_block"},
+		place_on = {"hades_xocean:brain_block","hades_xocean:tube_block","hades_xocean:coral_orange","hodes_xocean:coral_brown","hades_xocean:bubble_block"},
 		place_offset_y = -1,
 		sidelen = 16,
 		noise_params = {
@@ -1469,14 +1481,14 @@ minetest.register_decoration({
 		y_max = -5,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "xocean:skeleton_brain",
+		decoration = "hades_xocean:skeleton_brain",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:tube_plant",
+		name = "hades_xocean:tube_plant",
 		deco_type = "simple",
-		place_on = {"xocean:brain_block","xocean:tube_block","default:coral_orange","default:coral_brown","xocean:bubble_block"},
+		place_on = {"hades_xocean:brain_block","hades_xocean:tube_block","hades_xocean:coral_orange","hades_xocean:coral_brown","hades_xocean:bubble_block"},
 		place_offset_y = -1,
 		sidelen = 16,
 		noise_params = {
@@ -1498,14 +1510,14 @@ minetest.register_decoration({
 		y_max = -5,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "xocean:skeleton_tube",
+		decoration = "hades_xocean:skeleton_tube",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:fire_plant",
+		name = "hades_xocean:fire_plant",
 		deco_type = "simple",
-		place_on = {"xocean:brain_block","xocean:tube_block","default:coral_orange","default:coral_brown","xocean:bubble_block"},
+		place_on = {"hades_xocean:brain_block","hades_xocean:tube_block","hades_xocean:coral_orange","hades_xocean:coral_brown","hades_xocean:bubble_block"},
 		place_offset_y = -1,
 		sidelen = 16,
 		noise_params = {
@@ -1527,14 +1539,14 @@ minetest.register_decoration({
 		y_max = -5,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "xocean:fire",
+		decoration = "hades_xocean:fire",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:horn_plant",
+		name = "hades_xocean:horn_plant",
 		deco_type = "simple",
-		place_on = {"xocean:brain_block","xocean:tube_block","default:coral_orange","default:coral_brown","xocean:bubble_block"},
+		place_on = {"hades_xocean:brain_block","hades_xocean:tube_block","hades_xocean:coral_orange","hades_xocean:coral_brown","hades_xocean:bubble_block"},
 		place_offset_y = -1,
 		sidelen = 16,
 		noise_params = {
@@ -1556,14 +1568,14 @@ minetest.register_decoration({
 		y_max = -5,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "xocean:horn",
+		decoration = "hades_xocean:horn",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:bubble_plant",
+		name = "hades_xocean:bubble_plant",
 		deco_type = "simple",
-		place_on = {"xocean:brain_block","xocean:tube_block","default:coral_orange","default:coral_brown","xocean:bubble_block"},
+		place_on = {"hades_xocean:brain_block","hades_xocean:tube_block","hades_xocean:coral_orange","hades_xocean:coral_brown","hades_xocean:bubble_block"},
 		place_offset_y = -1,
 		sidelen = 16,
 		noise_params = {
@@ -1585,14 +1597,14 @@ minetest.register_decoration({
 		y_max = -5,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "xocean:bubble",
+		decoration = "hades_xocean:bubble",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:brain_plant",
+		name = "hades_xocean:brain_plant",
 		deco_type = "simple",
-		place_on = {"xocean:brain_block","xocean:tube_block","default:coral_orange","default:coral_brown","xocean:bubble_block"},
+		place_on = {"hades_xocean:brain_block","hades_xocean:tube_block","hades_xocean:coral_orange","hades_xocean:coral_brown","hades_xocean:bubble_block"},
 		place_offset_y = -1,
 		sidelen = 16,
 		noise_params = {
@@ -1614,14 +1626,14 @@ minetest.register_decoration({
 		y_max = -5,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "default:coral_pink",
+		decoration = "hades_xocean:coral_pink",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:tube_plant",
+		name = "hades_xocean:tube_plant",
 		deco_type = "simple",
-		place_on = {"xocean:brain_block","xocean:tube_block","default:coral_orange","default:coral_brown","xocean:bubble_block"},
+		place_on = {"hades_xocean:brain_block","hades_xocean:tube_block","hades_xocean:coral_orange","hades_xocean:coral_brown","hades_xocean:bubble_block"},
 		place_offset_y = -1,
 		sidelen = 16,
 		noise_params = {
@@ -1643,12 +1655,12 @@ minetest.register_decoration({
 		y_max = -5,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "default:coral_cyan",
+		decoration = "hades_xocean:coral_cyan",
 		param2 = 48,
 		param2_max = 96,
 	})
 	minetest.register_decoration({
-		name = "xocean:pickle",
+		name = "hades_xocean:pickle",
 		deco_type = "simple",
 		place_on = {"default:sand"},
 		place_offset_y = -1,
@@ -1672,14 +1684,15 @@ minetest.register_decoration({
 		y_max = -8,
 		y_min = -50,
 		flags = "force_placement",
-		decoration = "xocean:pickle",
+		decoration = "hades_xocean:pickle",
 		param2 = 48,
 		param2_max = 96,
 	})
+--]]
 ---Mobs
 if minetest.get_modpath("mobs") then
 local l_water_level		= minetest.setting_get("water_level") - 2
-	mobs:register_mob("xocean:dolphin", {
+	mobs:register_mob("hades_xocean:dolphin", {
 		type = "animal",
 		attack_type = "dogfight",
 		damage = 1,
@@ -1700,8 +1713,9 @@ local l_water_level		= minetest.setting_get("water_level") - 2
 		makes_footstep_sound = false,
 		walk_velocity = 4,
 		run_velocity = 6,
+		stepheight = 0.1,
 		fly = true,
-		fly_in = "default:water_source",
+		fly_in = "hades_core:water_source",
 		fall_speed = 0,
 		rotate = 90,
 		view_range = 30,
@@ -1721,9 +1735,9 @@ local l_water_level		= minetest.setting_get("water_level") - 2
 	    run_end = 100,
 		},
 	})
-	mobs:spawn_specific("xocean:dolphin",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	5, 20, 30, 10000, 2, -31000, l_water_level)
-	mobs:register_egg("xocean:dolphin", "Dolphin", "xocean_stone.png", 1)
-mobs:register_mob("xocean:fish", {
+	--mobs:spawn_specific("hades_xocean:dolphin",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	5, 20, 30, 10000, 2, -31000, l_water_level)
+	mobs:register_egg("hades_xocean:dolphin", "Dolphin", "xocean_stone.png", 1)
+mobs:register_mob("hades_xocean:fish", {
 		type = "animal",
 		hp_min = 5,
 		hp_max = 5,
@@ -1739,13 +1753,14 @@ mobs:register_mob("xocean:fish", {
 			{"mobs_fishy3.png"}
 		},
 		drops = {
-        {name = "xocean:fish_edible", chance = 1, min = 1, max = 1},
+        {name = "hades_xocean:fish_edible", chance = 1, min = 1, max = 1},
     },
 		makes_footstep_sound = false,
 		walk_velocity = 2,
 		run_velocity = 3,
+		stepheight = 0.1,
 		fly = true,
-		fly_in = "default:water_source",
+		fly_in = "hades_core:water_source",
 		fall_speed = 0,
 		view_range = 30,
 		water_damage = 0,
@@ -1762,9 +1777,9 @@ mobs:register_mob("xocean:fish", {
 	    run_end = 100,
 		},
 	})
-	mobs:spawn_specific("xocean:fish",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
-	mobs:register_egg("xocean:fish", "Tropical Fish (Kob)", "xocean_fish.png", 0)
-mobs:register_mob("xocean:fish2", {
+	--mobs:spawn_specific("hades_xocean:fish",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
+	mobs:register_egg("hades_xocean:fish", "Tropical Fish (Kob)", "xocean_fish.png", 0)
+mobs:register_mob("hades_xocean:fish2", {
 		type = "animal",
 		hp_min = 5,
 		hp_max = 5,
@@ -1779,13 +1794,14 @@ mobs:register_mob("xocean:fish2", {
 			{"mobs_fishy6.png"}
 		},
 		drops = {
-        {name = "xocean:fish_edible", chance = 2, min = 1, max = 2},
+        {name = "hades_xocean:fish_edible", chance = 2, min = 1, max = 2},
     },
 		makes_footstep_sound = false,
 		walk_velocity = 2,
 		run_velocity = 3,
+		stepheight = 0.1,
 		fly = true,
-		fly_in = "default:water_source",
+		fly_in = "hades_core:water_source",
 		fall_speed = 0,
 		view_range = 30,
 		water_damage = 0,
@@ -1802,9 +1818,9 @@ mobs:register_mob("xocean:fish2", {
 	    run_end = 100,
 		},
 	})
-	mobs:spawn_specific("xocean:fish2",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
-	mobs:register_egg("xocean:fish2", "Tropical Fish (SunStreak)", "xocean_fish2.png", 0)
-mobs:register_mob("xocean:fish3", {
+	--mobs:spawn_specific("hades_xocean:fish2",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
+	mobs:register_egg("hades_xocean:fish2", "Tropical Fish (SunStreak)", "xocean_fish2.png", 0)
+mobs:register_mob("hades_xocean:fish3", {
 		type = "animal",
 		hp_min = 5,
 		hp_max = 5,
@@ -1819,13 +1835,14 @@ mobs:register_mob("xocean:fish3", {
 			{"mobs_fishy9.png"}
 		},
 		drops = {
-        {name = "xocean:fish_edible", chance = 2, min = 1, max = 2},
+        {name = "hades_xocean:fish_edible", chance = 2, min = 1, max = 2},
     },
 		makes_footstep_sound = false,
 		walk_velocity = 2,
 		run_velocity = 3,
+		stepheight = 0.1,
 		fly = true,
-		fly_in = "default:water_source",
+		fly_in = "hades_core:water_source",
 		fall_speed = 0,
 		view_range = 30,
 		water_damage = 0,
@@ -1842,9 +1859,9 @@ mobs:register_mob("xocean:fish3", {
 	    run_end = 100,
 		},
 	})
-	mobs:spawn_specific("xocean:fish3",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
-	mobs:register_egg("xocean:fish3", "Tropical Fish (Dasher)", "xocean_fish3.png", 0)
-mobs:register_mob("xocean:fish4", {
+	--mobs:spawn_specific("hades_xocean:fish3",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
+	mobs:register_egg("hades_xocean:fish3", "Tropical Fish (Dasher)", "xocean_fish3.png", 0)
+mobs:register_mob("hades_xocean:fish4", {
 		type = "animal",
 		hp_min = 5,
 		hp_max = 5,
@@ -1859,13 +1876,14 @@ mobs:register_mob("xocean:fish4", {
 			{"mobs_fishy12.png"}
 		},
 		drops = {
-        {name = "xocean:fish_edible", chance = 2, min = 1, max = 2},
+        {name = "hades_xocean:fish_edible", chance = 2, min = 1, max = 2},
     },
 		makes_footstep_sound = false,
 		walk_velocity = 2,
 		run_velocity = 3,
+		stepheight = 0.1,
 		fly = true,
-		fly_in = "default:water_source",
+		fly_in = "hades_core:water_source",
 		fall_speed = 0,
 		view_range = 30,
 		water_damage = 0,
@@ -1882,8 +1900,8 @@ mobs:register_mob("xocean:fish4", {
 	    run_end = 100,
 		},
 	})
-	mobs:spawn_specific("xocean:fish4",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
-	mobs:register_egg("xocean:fish4", "Tropical Fish (Snapper)", "xocean_fish4.png", 0)
+	--mobs:spawn_specific("hades_xocean:fish4",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
+	mobs:register_egg("hades_xocean:fish4", "Tropical Fish (Snapper)", "xocean_fish4.png", 0)
 end
 
 -- Let the server console know the initialization is done

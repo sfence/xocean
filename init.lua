@@ -399,7 +399,6 @@ minetest.register_node("hades_xocean:coral_pink", {
 		local player_name = placer:get_player_name()
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
-		print(dump(pointed_thing))
 
 		if minetest.get_node(pos_under).name ~= "hades_xocean:brain_block" or
 				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
@@ -413,7 +412,8 @@ minetest.register_node("hades_xocean:coral_pink", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "hades_xocean:coral_pink"})
+		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above))
+		minetest.set_node(pos_under, {name = "hades_xocean:coral_pink", param2 = param2})
 		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
@@ -476,7 +476,7 @@ minetest.register_node("hades_xocean:skeleton_brain", {
 			return itemstack
 		end
 		
-		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_above, pos_under), true)
+		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above))
 		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_brain", param2 = param2})
 		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
@@ -543,7 +543,8 @@ minetest.register_node("hades_xocean:coral_cyan", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "hades_xocean:coral_cyan"})
+		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above), true)
+		minetest.set_node(pos_under, {name = "hades_xocean:coral_cyan", param2 = param2})
 		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
@@ -631,7 +632,7 @@ minetest.register_node("hades_xocean:bubble", {
 	waving = 1,
 	drop = "hades_xocean:skeleton_bubble",
 	paramtype = "light",
-	paramtype2 = "facedir",
+	paramtype2 = "wallmounted",
 	tiles = {"xocean_coral_bubble.png"},
 	special_tiles = {{name = "xocean_bubble.png", tileable_vertical = true}},
 	inventory_image = "xocean_bubble.png",
@@ -671,7 +672,8 @@ minetest.register_node("hades_xocean:bubble", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "hades_xocean:bubble"})
+		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above), true)
+		minetest.set_node(pos_under, {name = "hades_xocean:bubble", param2 = param2})
 		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
@@ -734,7 +736,8 @@ minetest.register_node("hades_xocean:skeleton_bubble", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_bubble"})
+		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above), true)
+		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_bubble", param2 = param2})
 		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
@@ -759,7 +762,7 @@ minetest.register_node("hades_xocean:horn", {
 	drawtype = "plantlike_rooted",
 	waving = 1,
 	paramtype = "light",
-	paramtype2 = "facedir",
+	paramtype2 = "wallmounted",
 	tiles = {"xocean_coral_horn.png"},
 	special_tiles = {{name = "xocean_horn.png", tileable_vertical = true}},
 	inventory_image = "xocean_horn.png",
@@ -800,7 +803,8 @@ minetest.register_node("hades_xocean:horn", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "hades_xocean:horn"})
+		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above), true)
+		minetest.set_node(pos_under, {name = "hades_xocean:horn", param2 = param2})
 		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
@@ -893,7 +897,7 @@ minetest.register_node("hades_xocean:fire", {
 	drawtype = "plantlike_rooted",
 	waving = 1,
 	paramtype = "light",
-	paramtype2 = "facedir",
+	paramtype2 = "wallmounted",
 	tiles = {"xocean_coral_fire.png"},
 	special_tiles = {{name = "xocean_fire.png", tileable_vertical = true}},
 	inventory_image = "xocean_fire.png",
@@ -934,7 +938,8 @@ minetest.register_node("hades_xocean:fire", {
 			return itemstack
 		end
 
-		minetest.set_node(pos_under, {name = "hades_xocean:fire"})
+		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above), true)
+		minetest.set_node(pos_under, {name = "hades_xocean:fire", param2 = param2})
 		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end

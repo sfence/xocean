@@ -58,6 +58,14 @@ local coral_skeletons = {
   ["hades_xocean:tube_block"]="hades_xocean:tube_skeleton",
   ["hades_xocean:coral_cyan"]="hades_xocean:skeleton_tube",
 }
+local check_pos = {
+  {x = 0, y =1, z = 0},
+	{x = 1, y =0, z = 0},
+	{x = -1, y =0, z = 0},
+	{x = 0, y =0, z = 1},
+	{x = 0, y =0, z = -1},
+  {x = 0, y =-1, z = 0},
+}
 local coral_light_limit = 4
 minetest.register_abm({ 
   label = "Kill coral",
@@ -67,13 +75,28 @@ minetest.register_abm({
   action = function(pos, node)
     if (minetest.find_node_near(pos, 1, {"air"}) ~= nil)
 				or (minetest.find_node_near(pos, 1, {"group:water"}) == nil) then
-      minetest.set_node(pos, {name=coral_skeletons[node.name]})
+      minetest.swap_node(pos, {name=coral_skeletons[node.name]})
     else
-      local dir = minetest.facedir_to_dir(node.param2)
-      local check = vector.add(pos, dir)
-      check = minetest.get_node(check)
-		  if ((check.param1%16)<coral_light_limit) then
-        minetest.set_node(pos, {name=coral_skeletons[node.name]})
+      if minetest.get_item_group(node.name, "coral_growing") then
+        local dir = minetest.wallmounted_to_dir(node.param2%8)
+        local check = vector.subtract(pos, dir)
+        check = minetest.get_node(check)
+        if ((check.param1%16)<coral_light_limit) then
+          minetest.swap_node(pos, {name=coral_skeletons[node.name]})
+        end
+      else
+        local light_good = false
+        for _,check in pairs(check_pos) do
+          local get_pos = vector.add(pos, check)
+          local node = minetest.get_node(get_pos)
+          if (node.name=="hades_core:water_source") and ((node.param1%16)>=coral_light_limit) then
+            light_good = true
+            break
+          end
+        end
+        if not light_good then
+          minetest.set_node(pos, {name=coral_skeletons[node.name]})
+        end
       end
     end
   end,
@@ -87,14 +110,6 @@ local coral_grow = {
   ["hades_xocean:fire"]="hades_xocean:coral_orange",
   ["hades_xocean:coral_cyan"]="hades_xocean:tube_block",
 }
-local check_pos = {
-  {x = 0, y =1, z = 0},
-	{x = 1, y =0, z = 0},
-	{x = -1, y =0, z = 0},
-	{x = 0, y =0, z = 1},
-	{x = 0, y =0, z = -1},
-  {x = 0, y =-1, z = 0},
-}
 local coral_param_treshold = 31 
 local function find_grow_pos(pos)
 	local max_light = coral_light_limit-1
@@ -102,8 +117,9 @@ local function find_grow_pos(pos)
 	for _,check in pairs(check_pos) do
 		local get_pos = vector.add(pos, check)
 		local node = minetest.get_node(get_pos)
-		if (node.name=="hades_core:water_source") and ((node.param1%16)>max_light) then
-			max_light = node.param1%16
+    local day_light = node.param1%16 
+		if (node.name=="hades_core:water_source") and (day_light>max_light) then
+			max_light = day_light
 			sel_pos = get_pos
 		end
 	end
@@ -116,16 +132,21 @@ minetest.register_abm({
   interval = 677,
   chance = 1109,
   action = function(pos, node)
-    if (minetest.find_node_near(pos, 1, {"air"}) == nil)
-				and (minetest.find_node_near(pos, 1, {"group:water"}) ~= nil)
-				and ((node.param1%16)>=coral_light_limit) then
+    if (minetest.find_node_near(pos, 1, {"air"}) ~= nil)
+				or (minetest.find_node_near(pos, 1, {"group:water"}) == nil) then
+      return
+    end
+    local dir = minetest.wallmounted_to_dir(node.param2%8)
+    local check = vector.subtract(pos, dir)
+    check = minetest.get_node(check)
+		if ((check.param1%16)>=coral_light_limit) then
 			node.param2 = node.param2 + 8
 			if (node.param2/8 >= coral_param_treshold) then
-				local new_coral = minetest.wallmounted_to_dir(node.param2)
-				new_coral = vector:add(pos, new_coral)
+				local new_coral = minetest.wallmounted_to_dir(node.param2%8)
+				new_coral = vector.subtract(pos, new_coral)
 				local dir = find_grow_pos(new_coral)
 				if (dir~=nil) then
-					local param2 = minetest.dir_to_wallmounted(vector.subtract(dir, new_coral),true)
+					local param2 = minetest.dir_to_wallmounted(vector.subtract(new_coral, dir))
 					minetest.set_node(new_coral, {name=node.name, param2=param2})
 				else
 					minetest.set_node(new_coral, {name=coral_grow[node.name]})
@@ -133,10 +154,10 @@ minetest.register_abm({
 				
 				dir = find_grow_pos(pos)
 				if (dir~=nil) then
-					local param2 = minetest.dir_to_wallmounted(vector.subtract(dir, new_coral),true)
-					minetest.set_node(pos, {name=node.name, param2=param2})
+					local param2 = minetest.dir_to_wallmounted(vector.subtract(pos, dir))
+					minetest.swap_node(pos, {name=node.name, param2=param2})
 				else
-					minetest.set_node(pos, {name=coral_grow[node.name]})
+					minetest.swap_node(pos, {name=coral_grow[node.name]})
 				end
 			else
 				minetest.swap_node(pos, node)

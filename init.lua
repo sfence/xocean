@@ -4,7 +4,6 @@ core.log("[Xocean] Initialization begins...")
 
 local modpath = minetest.get_modpath(minetest.get_current_modname())
 
-
 minetest.register_node("hades_xocean:ocean_cobble", {
 	description = "Ocean Cobblestone",
 	tiles = {"xocean_cobble.png"},
@@ -23,6 +22,10 @@ minetest.register_craft({
 	output = "hades_xocean:ocean_stone",
 	recipe = "hades_xocean:ocean_cobble",
 })
+
+-- have to be do, after ocean stone node is registered
+dofile(modpath.."/hades.lua")
+
 --[[
 ---Spawn the stone
 minetest.register_ore({
@@ -140,6 +143,7 @@ minetest.register_craft({
 --minetest.override_item("default:sand_with_kelp", {
 minetest.register_node("hades_xocean:sand_with_kelp", {
 	description = "Kelp",
+	_tt_help = "Need underwater sand (no volcanic, fertilize, silver or desert) to grow",
 	drawtype = "plantlike_rooted",
 	waving = 1,
 	tiles = {"default_sand.png"},
@@ -156,7 +160,7 @@ minetest.register_node("hades_xocean:sand_with_kelp", {
 				{-2/16, 0.5, -2/16, 2/16, 3.5, 2/16},
 		},
 	},
-	node_dig_prediction = "default:sand",
+	node_dig_prediction = "hades_default:sand",
 	node_placement_prediction = "",
 	sounds = hades_sounds.node_sound_sand_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
@@ -176,12 +180,13 @@ minetest.register_node("hades_xocean:sand_with_kelp", {
 		end
 
 		local pos = pointed_thing.under
-		if minetest.get_node(pos).name ~= "default:sand" then
+		if minetest.get_node(pos).name ~= "hades_default:sand" then
 			return itemstack
 		end
 
-		local height = math.random(4, 6)
-		local pos_top = {x = pos.x, y = pos.y + height, z = pos.z}
+    -- have to grow?
+		local height = 1--math.random(4, 6)*16
+		local pos_top = {x = pos.x, y = pos.y + math.ceil(height/16), z = pos.z}
 		local node_top = minetest.get_node(pos_top)
 		local def_top = minetest.registered_nodes[node_top.name]
 		local player_name = placer:get_player_name()
@@ -190,8 +195,8 @@ minetest.register_node("hades_xocean:sand_with_kelp", {
 				minetest.get_item_group(node_top.name, "water") > 0 then
 			if not minetest.is_protected(pos, player_name) and
 					not minetest.is_protected(pos_top, player_name) then
-				minetest.set_node(pos, {name = "default:sand_with_kelp",
-					param2 = height * 16})
+				minetest.set_node(pos, {name = "hades_xocean:sand_with_kelp",
+					param2 = height})
 				if not (minetest.is_creative_enabled(player_name)) then
 					itemstack:take_item()
 				end
@@ -199,6 +204,8 @@ minetest.register_node("hades_xocean:sand_with_kelp", {
 				minetest.chat_send_player(player_name, "Node is protected")
 				minetest.record_protection_violation(pos, player_name)
 			end
+    else
+			minetest.chat_send_player(player_name, "Missing water source above sand.")
 		end
 
 		return itemstack
@@ -232,6 +239,7 @@ minetest.register_craft({
 })
 minetest.register_node("hades_xocean:seagrass", {
 	description = "Seagrass",
+	_tt_help = "Need underwater sand (no volcanic, fertilize, silver or desert) to grow",
 	drawtype = "plantlike_rooted",
 	waving = 1,
 	paramtype = "light",
@@ -246,7 +254,7 @@ minetest.register_node("hades_xocean:seagrass", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
-	node_dig_prediction = "default:sand",
+	node_dig_prediction = "default_default:sand",
 	node_placement_prediction = "",
 	sounds = hades_sounds.node_sound_stone_defaults({
 		dig = {name = "default_dig_snappy", gain = 0.2},
@@ -262,8 +270,9 @@ minetest.register_node("hades_xocean:seagrass", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		if minetest.get_node(pos_under).name ~= "default:sand" or
+		if minetest.get_node(pos_under).name ~= "hades_default:sand" or
 				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
+			minetest.chat_send_player(player_name, "Missing water source above sand.")
 			return itemstack
 		end
 
@@ -352,7 +361,7 @@ minetest.register_node("hades_xocean:pickle", {
 minetest.register_node("hades_xocean:brain_block", {
 	description = "Brain Coral Block",
 	tiles = {"xocean_coral_brain.png"},
-	groups = {cracky = 3},
+	groups = {cracky = 3, coral_live = 1},
 	drop = "hades_xocean:brain_skeleton",
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
@@ -361,11 +370,12 @@ minetest.register_node("hades_xocean:coral_pink", {
 	description = "Brain Coral",
 	drawtype = "plantlike_rooted",
 	waving = 1,
-	paramtype = "light",
+	--paramtype = "light",
+	paramtype2 = "wallmounted",
 	tiles = {"xocean_coral_brain.png"},
 	special_tiles = {{name = "xocean_brain.png", tileable_vertical = true}},
 	inventory_image = "xocean_brain.png",
-	groups = {snappy = 3},
+	groups = {snappy = 3, coral_live = 1, coral_growing = 1},
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -373,6 +383,7 @@ minetest.register_node("hades_xocean:coral_pink", {
 				{-4/16, 0.5, -4/16, 4/16, 1.5, 4/16},
 		},
 	},
+	drop = "hades_xocean:skeleton_brain",
 	node_dig_prediction = "hades_xocean:brain_block",
 	node_placement_prediction = "",
 	sounds = hades_sounds.node_sound_stone_defaults({
@@ -388,6 +399,7 @@ minetest.register_node("hades_xocean:coral_pink", {
 		local player_name = placer:get_player_name()
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
+		print(dump(pointed_thing))
 
 		if minetest.get_node(pos_under).name ~= "hades_xocean:brain_block" or
 				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
@@ -416,14 +428,15 @@ minetest.register_node("hades_xocean:coral_pink", {
 minetest.register_node("hades_xocean:brain_skeleton", {
 	description = "Brain Coral Skeleton Block",
 	tiles = {"xocean_coral_brain_skeleton.png"},
-	groups = {cracky = 3},
+	groups = {cracky = 3, coral_block_skeleton = 1},
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
 minetest.register_node("hades_xocean:skeleton_brain", {
 	description = "Brain Coral Skeleton",
 	drawtype = "plantlike_rooted",
 	waving = 1,
-	paramtype = "light",
+	--paramtype = "light",
+	paramtype2 = "wallmounted",
 	tiles = {"xocean_coral_brain_skeleton.png"},
 	special_tiles = {{name = "xocean_brain_skeleton.png", tileable_vertical = true}},
 	inventory_image = "xocean_brain_skeleton.png",
@@ -452,7 +465,7 @@ minetest.register_node("hades_xocean:skeleton_brain", {
 		local pos_above = pointed_thing.above
 
 		if minetest.get_node(pos_under).name ~= "hades_xocean:brain_skeleton" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+				minetest.get_node(pos_above).name ~= "hades_xocean:water_source" then
 			return itemstack
 		end
 
@@ -462,8 +475,9 @@ minetest.register_node("hades_xocean:skeleton_brain", {
 			minetest.record_protection_violation(pos_under, player_name)
 			return itemstack
 		end
-
-		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_brain"})
+		
+		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_above, pos_under), true)
+		minetest.set_node(pos_under, {name = "hades_xocean:skeleton_brain", param2 = param2})
 		if not (minetest.is_creative_enabled(player_name)) then
 			itemstack:take_item()
 		end
@@ -478,7 +492,7 @@ minetest.register_node("hades_xocean:skeleton_brain", {
 minetest.register_node("hades_xocean:tube_block", {
 	description = "Tube Coral Block",
 	tiles = {"xocean_coral_tube.png"},
-	groups = {cracky = 3},
+	groups = {cracky = 3, coral_live = 1},
 	drop = "hades_xocean:tube_skeleton",
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
@@ -487,11 +501,12 @@ minetest.register_node("hades_xocean:coral_cyan", {
 	description = "Tube Coral",
 	drawtype = "plantlike_rooted",
 	waving = 1,
-	paramtype = "light",
+	--paramtype = "light",
+	paramtype2 = "wallmounted",
 	tiles = {"xocean_coral_tube.png"},
 	special_tiles = {{name = "xocean_tube.png", tileable_vertical = true}},
 	inventory_image = "xocean_tube.png",
-	groups = {snappy = 3},
+	groups = {snappy = 3, coral_live = 1, coral_growing = 1},
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -517,7 +532,7 @@ minetest.register_node("hades_xocean:coral_cyan", {
 		local pos_above = pointed_thing.above
 
 		if minetest.get_node(pos_under).name ~= "hades_xocean:tube_block" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
 
@@ -543,14 +558,15 @@ minetest.register_node("hades_xocean:coral_cyan", {
 minetest.register_node("hades_xocean:tube_skeleton", {
 	description = "Tube Coral Skeleton Block",
 	tiles = {"xocean_coral_tube_skeleton.png"},
-	groups = {cracky = 3},
+	groups = {cracky = 3, coral_block_skeleton = 1},
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
 minetest.register_node("hades_xocean:skeleton_tube", {
 	description = "Tube Coral Skeleton",
 	drawtype = "plantlike_rooted",
 	waving = 1,
-	paramtype = "light",
+	--paramtype = "light",
+  paramtype2 = "wallmounted",
 	tiles = {"xocean_coral_tube_skeleton.png"},
 	special_tiles = {{name = "xocean_tube_skeleton.png", tileable_vertical = true}},
 	inventory_image = "xocean_tube_skeleton.png",
@@ -579,7 +595,7 @@ minetest.register_node("hades_xocean:skeleton_tube", {
 		local pos_above = pointed_thing.above
 
 		if minetest.get_node(pos_under).name ~= "hades_xocean:tube_skeleton" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
 
@@ -605,7 +621,7 @@ minetest.register_node("hades_xocean:skeleton_tube", {
 minetest.register_node("hades_xocean:bubble_block", {
 	description = "Bubble Coral Block",
 	tiles = {"xocean_coral_bubble.png"},
-	groups = {cracky = 3},
+	groups = {cracky = 3, coral_live = 1},
 	drop = "hades_xocean:bubble_skeleton",
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
@@ -615,10 +631,11 @@ minetest.register_node("hades_xocean:bubble", {
 	waving = 1,
 	drop = "hades_xocean:skeleton_bubble",
 	paramtype = "light",
+	paramtype2 = "facedir",
 	tiles = {"xocean_coral_bubble.png"},
 	special_tiles = {{name = "xocean_bubble.png", tileable_vertical = true}},
 	inventory_image = "xocean_bubble.png",
-	groups = {snappy = 3},
+	groups = {snappy = 3, coral_live = 1, coral_growing = 1},
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -643,7 +660,7 @@ minetest.register_node("hades_xocean:bubble", {
 		local pos_above = pointed_thing.above
 
 		if minetest.get_node(pos_under).name ~= "hades_xocean:bubble_block" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
 
@@ -669,7 +686,7 @@ minetest.register_node("hades_xocean:bubble", {
 minetest.register_node("hades_xocean:bubble_skeleton", {
 	description = "Bubble Coral Skeleton Block",
 	tiles = {"xocean_coral_bubble_skeleton.png"},
-	groups = {cracky = 3},
+	groups = {cracky = 3, coral_block_skeleton = 1},
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
 minetest.register_node("hades_xocean:skeleton_bubble", {
@@ -706,7 +723,7 @@ minetest.register_node("hades_xocean:skeleton_bubble", {
 		local pos_above = pointed_thing.above
 
 		if minetest.get_node(pos_under).name ~= "hades_xocean:bubble_skeleton" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
 
@@ -733,7 +750,7 @@ minetest.register_node("hades_xocean:skeleton_bubble", {
 minetest.register_node("hades_xocean:coral_brown", {
  	description = "Horn Coral Block",
 	tiles = {"xocean_coral_horn.png"},
-	groups = {cracky = 3},
+	groups = {cracky = 3, coral_live = 1},
 	drop = "hades_xocean:coral_skeleton",
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
@@ -742,10 +759,11 @@ minetest.register_node("hades_xocean:horn", {
 	drawtype = "plantlike_rooted",
 	waving = 1,
 	paramtype = "light",
+	paramtype2 = "facedir",
 	tiles = {"xocean_coral_horn.png"},
 	special_tiles = {{name = "xocean_horn.png", tileable_vertical = true}},
 	inventory_image = "xocean_horn.png",
-	groups = {snappy = 3},
+	groups = {snappy = 3, coral_live = 1, coral_growing = 1},
 	drop = "hades_xocean:skeleton_horn",
 	selection_box = {
 		type = "fixed",
@@ -800,7 +818,7 @@ minetest.register_node("hades_xocean:horn", {
 minetest.register_node("hades_xocean:coral_skeleton", {
  	description = "Horn Coral Skeleton Block",
 	tiles = {"xocean_coral_horn_skeleton.png"},
-	groups = {cracky = 3},
+	groups = {cracky = 3, coral_block_skeleton = 1},
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
 minetest.register_node("hades_xocean:skeleton_horn", {
@@ -866,7 +884,7 @@ minetest.register_node("hades_xocean:skeleton_horn", {
 minetest.register_node("hades_xocean:coral_orange", {
  	description = "Fire Coral Block",
 	tiles = {"xocean_coral_fire.png"},
-	groups = {cracky = 3},
+	groups = {cracky = 3, coral_live = 1},
 	drop = "hades_xocean:fire_skeleton",
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
@@ -875,10 +893,11 @@ minetest.register_node("hades_xocean:fire", {
 	drawtype = "plantlike_rooted",
 	waving = 1,
 	paramtype = "light",
+	paramtype2 = "facedir",
 	tiles = {"xocean_coral_fire.png"},
 	special_tiles = {{name = "xocean_fire.png", tileable_vertical = true}},
 	inventory_image = "xocean_fire.png",
-	groups = {snappy = 3},
+	groups = {snappy = 3, coral_live = 1, coral_growing = 1},
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -930,7 +949,7 @@ minetest.register_node("hades_xocean:fire", {
 minetest.register_node("hades_xocean:fire_skeleton", {
  	description = "Fire Coral Skeleton Block",
 	tiles = {"xocean_coral_fire_skeleton.png"},
-	groups = {cracky = 3},
+	groups = {cracky = 3, coral_block_skeleton = 1},
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
 minetest.register_node("hades_xocean:skeleton_fire", {
@@ -966,7 +985,7 @@ minetest.register_node("hades_xocean:skeleton_fire", {
 		local pos_above = pointed_thing.above
 
 		if minetest.get_node(pos_under).name ~= "hades_xocean:fire_skeleton" or
-				minetest.get_node(pos_above).name ~= "default:water_source" then
+				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
 
@@ -1733,9 +1752,17 @@ local l_water_level		= minetest.setting_get("water_level") - 2
 	    run_start = 40,
 	    run_end = 100,
 		},
+		follow = {"hades_xocean:fish_edible", 
+		},
+		on_rightclick = function(self, clicker)
+			if mobs:feed_tame(self, clicker, 8, true, true) then return end
+		end
 	})
 	--mobs:spawn_specific("hades_xocean:dolphin",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	5, 20, 30, 10000, 2, -31000, l_water_level)
 	mobs:register_egg("hades_xocean:dolphin", "Dolphin", "xocean_stone.png", 1)
+  minetest.override_item("hades_xocean:dolphin", {
+      _tt_help = "Eat fishes.",
+    })
 mobs:register_mob("hades_xocean:fish", {
 		type = "animal",
 		hp_min = 5,
@@ -1775,9 +1802,18 @@ mobs:register_mob("hades_xocean:fish", {
 	    run_start = 40,
 	    run_end = 100,
 		},
+		follow = {"hades_waterplants:seaweed", "hades_waterplants:waterlily",
+			"hades_xocean:sand_with_kelp", "hades_xocean:seagrass",
+		},
+		on_rightclick = function(self, clicker)
+			if mobs:feed_tame(self, clicker, 4, true, true) then return end
+		end
 	})
 	--mobs:spawn_specific("hades_xocean:fish",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
 	mobs:register_egg("hades_xocean:fish", "Tropical Fish (Kob)", "xocean_fish.png", 0)
+  minetest.override_item("hades_xocean:fish", {
+      _tt_help = "Eat water plants.",
+    })
 mobs:register_mob("hades_xocean:fish2", {
 		type = "animal",
 		hp_min = 5,
@@ -1816,9 +1852,18 @@ mobs:register_mob("hades_xocean:fish2", {
 	    run_start = 40,
 	    run_end = 100,
 		},
+		follow = {"hades_waterplants:seaweed", "hades_waterplants:waterlily",
+			"hades_xocean:sand_with_kelp", "hades_xocean:seagrass",
+		},
+		on_rightclick = function(self, clicker)
+			if mobs:feed_tame(self, clicker, 4, true, true) then return end
+		end
 	})
 	--mobs:spawn_specific("hades_xocean:fish2",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
 	mobs:register_egg("hades_xocean:fish2", "Tropical Fish (SunStreak)", "xocean_fish2.png", 0)
+  minetest.override_item("hades_xocean:fish2", {
+      _tt_help = "Eat water plants.",
+    })
 mobs:register_mob("hades_xocean:fish3", {
 		type = "animal",
 		hp_min = 5,
@@ -1857,9 +1902,18 @@ mobs:register_mob("hades_xocean:fish3", {
 	    run_start = 40,
 	    run_end = 100,
 		},
+		follow = {"hades_waterplants:seaweed", "hades_waterplants:waterlily",
+			"hades_xocean:sand_with_kelp", "hades_xocean:seagrass",
+		},
+		on_rightclick = function(self, clicker)
+			if mobs:feed_tame(self, clicker, 4, true, true) then return end
+		end
 	})
 	--mobs:spawn_specific("hades_xocean:fish3",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
 	mobs:register_egg("hades_xocean:fish3", "Tropical Fish (Dasher)", "xocean_fish3.png", 0)
+  minetest.override_item("hades_xocean:fish3", {
+      _tt_help = "Eat water plants.",
+    })
 mobs:register_mob("hades_xocean:fish4", {
 		type = "animal",
 		hp_min = 5,
@@ -1898,9 +1952,18 @@ mobs:register_mob("hades_xocean:fish4", {
 	    run_start = 40,
 	    run_end = 100,
 		},
+		follow = {"hades_waterplants:seaweed", "hades_waterplants:waterlily",
+			"hades_xocean:sand_with_kelp", "hades_xocean:seagrass",
+		},
+		on_rightclick = function(self, clicker)
+			if mobs:feed_tame(self, clicker, 4, true, true) then return end
+		end
 	})
 	--mobs:spawn_specific("hades_xocean:fish4",	{"default:water_source"},	{"default:water_flowing","default:water_source"},	2, 20, 30, 10000, 5, -31000, l_water_level)
 	mobs:register_egg("hades_xocean:fish4", "Tropical Fish (Snapper)", "xocean_fish4.png", 0)
+  minetest.override_item("hades_xocean:fish4", {
+      _tt_help = "Eat water plants.",
+    })
 end
 
 -- Let the server console know the initialization is done

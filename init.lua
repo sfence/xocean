@@ -368,6 +368,7 @@ minetest.register_node("hades_xocean:brain_block", {
 --minetest.override_item("default:coral_pink", {
 minetest.register_node("hades_xocean:coral_pink", {
 	description = "Brain Coral",
+  _tt_help = "Grow on Brain Coral Block.",
 	drawtype = "plantlike_rooted",
 	waving = 1,
 	--paramtype = "light",
@@ -499,6 +500,7 @@ minetest.register_node("hades_xocean:tube_block", {
 --minetest.override_item("default:coral_cyan", {
 minetest.register_node("hades_xocean:coral_cyan", {
 	description = "Tube Coral",
+  _tt_help = "Grow on Tube Coral Block.",
 	drawtype = "plantlike_rooted",
 	waving = 1,
 	--paramtype = "light",
@@ -628,6 +630,7 @@ minetest.register_node("hades_xocean:bubble_block", {
 })
 minetest.register_node("hades_xocean:bubble", {
 	description = "Bubble Coral",
+  _tt_help = "Grow on Bubble Coral Block.",
 	drawtype = "plantlike_rooted",
 	waving = 1,
 	drop = "hades_xocean:skeleton_bubble",
@@ -759,6 +762,7 @@ minetest.register_node("hades_xocean:coral_brown", {
 })
 minetest.register_node("hades_xocean:horn", {
 	description = "Horn Coral",
+  _tt_help = "Grow on Horn Coral Block.",
 	drawtype = "plantlike_rooted",
 	waving = 1,
 	paramtype = "light",
@@ -894,6 +898,7 @@ minetest.register_node("hades_xocean:coral_orange", {
 })
 minetest.register_node("hades_xocean:fire", {
 	description = "Fire Coral",
+  _tt_help = "Grow on Fire Coral Block.",
 	drawtype = "plantlike_rooted",
 	waving = 1,
 	paramtype = "light",

@@ -44,6 +44,48 @@ add_metamorphosis_report("hades_default:silver_sandstone",
 add_metamorphosis_report("hades_xocean:ocean_stone", 
     S("Ocean stone arise by metamorphosis from silver sandstone.")
   )
+-- craft corale blocks
+minetest.register_craft({
+	output = 'hades_xocean:brain_block',
+	recipe = {
+		{'hades_xocean:coral_pink', 'hades_xocean:coral_pink', 'hades_xocean:coral_pink'},
+		{'hades_xocean:coral_pink', 'hades_xocean:ocean_cobble', 'hades_xocean:coral_pink'},
+		{'hades_xocean:coral_pink', 'hades_xocean:coral_pink', 'hades_xocean:coral_pink'},
+		},
+})
+minetest.register_craft({
+	output = 'hades_xocean:bubble_block',
+	recipe = {
+		{'hades_xocean:bubble', 'hades_xocean:bubble', 'hades_xocean:bubble'},
+		{'hades_xocean:bubble', 'hades_xocean:ocean_cobble', 'hades_xocean:bubble'},
+		{'hades_xocean:bubble', 'hades_xocean:bubble', 'hades_xocean:bubble'},
+		},
+})
+minetest.register_craft({
+	output = 'hades_xocean:coral_brown',
+	recipe = {
+		{'hades_xocean:horn', 'hades_xocean:horn', 'hades_xocean:horn'},
+		{'hades_xocean:horn', 'hades_xocean:ocean_cobble', 'hades_xocean:horn'},
+		{'hades_xocean:horn', 'hades_xocean:horn', 'hades_xocean:horn'},
+		},
+})
+minetest.register_craft({
+	output = 'hades_xocean:coral_orange',
+	recipe = {
+		{'hades_xocean:fire', 'hades_xocean:fire', 'hades_xocean:fire'},
+		{'hades_xocean:fire', 'hades_xocean:ocean_cobble', 'hades_xocean:fire'},
+		{'hades_xocean:fire', 'hades_xocean:fire', 'hades_xocean:fire'},
+		},
+})
+minetest.register_craft({
+	output = 'hades_xocean:tube_block',
+	recipe = {
+		{'hades_xocean:coral_cyan', 'hades_xocean:coral_cyan', 'hades_xocean:coral_cyan'},
+		{'hades_xocean:coral_cyan', 'hades_xocean:ocean_cobble', 'hades_xocean:coral_cyan'},
+		{'hades_xocean:coral_cyan', 'hades_xocean:coral_cyan', 'hades_xocean:coral_cyan'},
+		},
+})
+
 
 -- kill corals
 local coral_skeletons = {

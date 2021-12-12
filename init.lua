@@ -107,7 +107,7 @@ minetest.register_craft({
 minetest.register_node("hades_xocean:sea_lantern", {
     description = "Sea Lantern",
     drawtype = "glasslike",
-	light_source = 14,
+    light_source = 14,
     tiles = {"xocean_lantern.png"},
     paramtype = "light",
     is_ground_content = true,
@@ -119,9 +119,9 @@ minetest.register_node("hades_xocean:sea_lantern", {
 minetest.register_craft({
 	output = '"hades_xocean:sea_lantern" 4',
 	recipe = {
-		{'hades_core:torch', 'hades_core:glass', 'hades_core:torch', },
+		{'mesecons_lamp:lamp_off', 'hades_core:glass', 'mesecons_lamp:lamp_off', },
 		{'hades_core:glass', 'hades_bucket:bucket_water', 'hades_core:glass', },
-		{'hades_core:torch', 'hades_core:glass', 'hades_core:torch', },
+		{'mesecons_lamp:lamp_off', 'hades_core:glass', 'mesecons_lamp:lamp_off', },
 		},
 		replacements = {{ "hades_bucket:bucket_water", "hades_bucket:bucket_empty"}}
 })
@@ -152,7 +152,7 @@ minetest.register_node("hades_xocean:sand_with_kelp", {
 	wield_image = "xocean_kelp.png",
 	paramtype = "light",
 	paramtype2 = "leveled",
-	groups = {snappy = 3},
+	groups = {snappy = 3, kelp = 1, kelp_growing = 1},
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -210,7 +210,18 @@ minetest.register_node("hades_xocean:sand_with_kelp", {
 
 		return itemstack
 	end,
-
+  after_dig_node = function(pos, oldnode, oldmetadata, digger)
+    local height = math.ceil(oldnode.param2/16)
+    if height>1 then
+      local itemstack = ItemStack("hades_xocean:sand_with_kelp")
+      itemstack:set_count(height-1)
+      local inv = digger:get_inventory()
+      itemstack = inv:add_item("main", itemstack)
+      if itemstack:get_count()>0 then
+        minetest.add_item(pos, itemstack)
+      end
+    end
+  end,
 	after_destruct  = function(pos, oldnode)
 		minetest.set_node(pos, {name = "hades_default:sand"})
 	end
@@ -246,7 +257,7 @@ minetest.register_node("hades_xocean:seagrass", {
 	tiles = {"default_sand.png"},
 	special_tiles = {{name = "xocean_grass.png", tileable_vertical = true}},
 	inventory_image = "xocean_grass.png",
-	groups = {snappy = 3},
+	groups = {snappy = 3, seagrass = 1, seagrass_growing = 1},
 	selection_box = {
 		type = "fixed",
 		fixed = {
@@ -333,7 +344,7 @@ minetest.register_node("hades_xocean:pickle", {
 		local pos_under = pointed_thing.under
 		local pos_above = pointed_thing.above
 
-		if minetest.get_node(pos_under).name ~= "default:sand" or
+		if minetest.get_node(pos_under).name ~= "hades_default:sand" or
 				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
 			return itemstack
 		end
@@ -358,10 +369,39 @@ minetest.register_node("hades_xocean:pickle", {
 	end,
 })
 ---Corals
+coral_on_place = function(itemstack, placer, pointed_thing, coral_name, coral_base)
+  if pointed_thing.type ~= "node" or not placer then
+    return itemstack
+  end
+
+  local player_name = placer:get_player_name()
+  local pos_under = pointed_thing.under
+  local pos_above = pointed_thing.above
+
+  if minetest.get_node(pos_under).name ~= coral_base or
+      minetest.get_node(pos_above).name ~= "hades_core:water_source" then
+    return itemstack
+  end
+
+  if minetest.is_protected(pos_under, player_name) or
+      minetest.is_protected(pos_above, player_name) then
+    minetest.chat_send_player(player_name, "Node is protected")
+    minetest.record_protection_violation(pos_under, player_name)
+    return itemstack
+  end
+
+  local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above))
+  minetest.set_node(pos_under, {name = coral_name, param2 = param2})
+  if not (minetest.is_creative_enabled(player_name)) then
+    itemstack:take_item()
+  end
+
+  return itemstack
+end,
 minetest.register_node("hades_xocean:brain_block", {
 	description = "Brain Coral Block",
 	tiles = {"xocean_coral_brain.png"},
-	groups = {cracky = 3, coral_live = 1},
+	groups = {cracky = 3, coral_live = 1, coral_block_growing = 1},
 	drop = "hades_xocean:brain_skeleton",
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
@@ -393,33 +433,7 @@ minetest.register_node("hades_xocean:coral_pink", {
 	}),
 
 	on_place = function(itemstack, placer, pointed_thing)
-		if pointed_thing.type ~= "node" or not placer then
-			return itemstack
-		end
-
-		local player_name = placer:get_player_name()
-		local pos_under = pointed_thing.under
-		local pos_above = pointed_thing.above
-
-		if minetest.get_node(pos_under).name ~= "hades_xocean:brain_block" or
-				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
-			return itemstack
-		end
-
-		if minetest.is_protected(pos_under, player_name) or
-				minetest.is_protected(pos_above, player_name) then
-			minetest.chat_send_player(player_name, "Node is protected")
-			minetest.record_protection_violation(pos_under, player_name)
-			return itemstack
-		end
-
-		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above))
-		minetest.set_node(pos_under, {name = "hades_xocean:coral_pink", param2 = param2})
-		if not (minetest.is_creative_enabled(player_name)) then
-			itemstack:take_item()
-		end
-
-		return itemstack
+    coral_on_place(itemstack, placer, pointed_thing, "hades_xocean:coral_pink", "hades_xocean:brain_block")
 	end,
 
 	after_destruct  = function(pos, oldnode)
@@ -428,6 +442,7 @@ minetest.register_node("hades_xocean:coral_pink", {
 })
 minetest.register_node("hades_xocean:brain_skeleton", {
 	description = "Brain Coral Skeleton Block",
+	short_description = "Brain Coral Skeleton Block",
 	tiles = {"xocean_coral_brain_skeleton.png"},
 	groups = {cracky = 3, coral_block_skeleton = 1},
 	sounds = hades_sounds.node_sound_stone_defaults(),
@@ -493,7 +508,7 @@ minetest.register_node("hades_xocean:skeleton_brain", {
 minetest.register_node("hades_xocean:tube_block", {
 	description = "Tube Coral Block",
 	tiles = {"xocean_coral_tube.png"},
-	groups = {cracky = 3, coral_live = 1},
+	groups = {cracky = 3, coral_live = 1, coral_block_growing = 1},
 	drop = "hades_xocean:tube_skeleton",
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
@@ -525,35 +540,8 @@ minetest.register_node("hades_xocean:coral_cyan", {
 	}),
 
 	on_place = function(itemstack, placer, pointed_thing)
-		if pointed_thing.type ~= "node" or not placer then
-			return itemstack
-		end
-
-		local player_name = placer:get_player_name()
-		local pos_under = pointed_thing.under
-		local pos_above = pointed_thing.above
-
-		if minetest.get_node(pos_under).name ~= "hades_xocean:tube_block" or
-				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
-			return itemstack
-		end
-
-		if minetest.is_protected(pos_under, player_name) or
-				minetest.is_protected(pos_above, player_name) then
-			minetest.chat_send_player(player_name, "Node is protected")
-			minetest.record_protection_violation(pos_under, player_name)
-			return itemstack
-		end
-
-		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above), true)
-		minetest.set_node(pos_under, {name = "hades_xocean:coral_cyan", param2 = param2})
-		if not (minetest.is_creative_enabled(player_name)) then
-			itemstack:take_item()
-		end
-
-		return itemstack
+    coral_on_place(itemstack, placer, pointed_thing, "hades_xocean:coral_cyan", "hades_xocean:tube_block")
 	end,
-
 	after_destruct  = function(pos, oldnode)
 		minetest.set_node(pos, {name = "hades_xocean:tube_block"})
 	end,
@@ -624,7 +612,7 @@ minetest.register_node("hades_xocean:skeleton_tube", {
 minetest.register_node("hades_xocean:bubble_block", {
 	description = "Bubble Coral Block",
 	tiles = {"xocean_coral_bubble.png"},
-	groups = {cracky = 3, coral_live = 1},
+	groups = {cracky = 3, coral_live = 1, coral_block_growing = 1},
 	drop = "hades_xocean:bubble_skeleton",
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
@@ -655,35 +643,8 @@ minetest.register_node("hades_xocean:bubble", {
 	}),
 
 	on_place = function(itemstack, placer, pointed_thing)
-		if pointed_thing.type ~= "node" or not placer then
-			return itemstack
-		end
-
-		local player_name = placer:get_player_name()
-		local pos_under = pointed_thing.under
-		local pos_above = pointed_thing.above
-
-		if minetest.get_node(pos_under).name ~= "hades_xocean:bubble_block" or
-				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
-			return itemstack
-		end
-
-		if minetest.is_protected(pos_under, player_name) or
-				minetest.is_protected(pos_above, player_name) then
-			minetest.chat_send_player(player_name, "Node is protected")
-			minetest.record_protection_violation(pos_under, player_name)
-			return itemstack
-		end
-
-		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above), true)
-		minetest.set_node(pos_under, {name = "hades_xocean:bubble", param2 = param2})
-		if not (minetest.is_creative_enabled(player_name)) then
-			itemstack:take_item()
-		end
-
-		return itemstack
+    coral_on_place(itemstack, placer, pointed_thing, "hades_xocean:bubble", "hades_xocean:bubble_block")
 	end,
-
 	after_destruct  = function(pos, oldnode)
 		minetest.set_node(pos, {name = "hades_xocean:bubble_block"})
 	end,
@@ -756,7 +717,7 @@ minetest.register_node("hades_xocean:skeleton_bubble", {
 minetest.register_node("hades_xocean:coral_brown", {
  	description = "Horn Coral Block",
 	tiles = {"xocean_coral_horn.png"},
-	groups = {cracky = 3, coral_live = 1},
+	groups = {cracky = 3, coral_live = 1, coral_block_growing = 1},
 	drop = "hades_xocean:coral_skeleton",
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
@@ -787,35 +748,8 @@ minetest.register_node("hades_xocean:horn", {
 	}),
 
 	on_place = function(itemstack, placer, pointed_thing)
-		if pointed_thing.type ~= "node" or not placer then
-			return itemstack
-		end
-
-		local player_name = placer:get_player_name()
-		local pos_under = pointed_thing.under
-		local pos_above = pointed_thing.above
-
-		if minetest.get_node(pos_under).name ~= "hades_xocean:coral_brown" or
-				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
-			return itemstack
-		end
-
-		if minetest.is_protected(pos_under, player_name) or
-				minetest.is_protected(pos_above, player_name) then
-			minetest.chat_send_player(player_name, "Node is protected")
-			minetest.record_protection_violation(pos_under, player_name)
-			return itemstack
-		end
-
-		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above), true)
-		minetest.set_node(pos_under, {name = "hades_xocean:horn", param2 = param2})
-		if not (minetest.is_creative_enabled(player_name)) then
-			itemstack:take_item()
-		end
-
-		return itemstack
+    coral_on_place(itemstack, placer, pointed_thing, "hades_xocean:horn", "hades_xocean:coral_brown")
 	end,
-
 	after_destruct  = function(pos, oldnode)
 		-- minetest.set_node(pos, {name = "hades_xocean:horn_block"})
 		--minetest.set_node(pos, {name = "hades_xocean:horn"})
@@ -892,7 +826,7 @@ minetest.register_node("hades_xocean:skeleton_horn", {
 minetest.register_node("hades_xocean:coral_orange", {
  	description = "Fire Coral Block",
 	tiles = {"xocean_coral_fire.png"},
-	groups = {cracky = 3, coral_live = 1},
+	groups = {cracky = 3, coral_live = 1, coral_block_growing = 1},
 	drop = "hades_xocean:fire_skeleton",
 	sounds = hades_sounds.node_sound_stone_defaults(),
 })
@@ -923,35 +857,8 @@ minetest.register_node("hades_xocean:fire", {
 	}),
 
 	on_place = function(itemstack, placer, pointed_thing)
-		if pointed_thing.type ~= "node" or not placer then
-			return itemstack
-		end
-
-		local player_name = placer:get_player_name()
-		local pos_under = pointed_thing.under
-		local pos_above = pointed_thing.above
-
-		if minetest.get_node(pos_under).name ~= "hades_xocean:coral_orange" or
-				minetest.get_node(pos_above).name ~= "hades_core:water_source" then
-			return itemstack
-		end
-
-		if minetest.is_protected(pos_under, player_name) or
-				minetest.is_protected(pos_above, player_name) then
-			minetest.chat_send_player(player_name, "Node is protected")
-			minetest.record_protection_violation(pos_under, player_name)
-			return itemstack
-		end
-
-		local param2 = minetest.dir_to_wallmounted(vector.subtract(pos_under, pos_above), true)
-		minetest.set_node(pos_under, {name = "hades_xocean:fire", param2 = param2})
-		if not (minetest.is_creative_enabled(player_name)) then
-			itemstack:take_item()
-		end
-
-		return itemstack
+    coral_on_place(itemstack, placer, pointed_thing, "hades_xocean:fire", "hades_xocean:coral_orange")
 	end,
-
 	after_destruct  = function(pos, oldnode)
 		minetest.set_node(pos, {name = "hades_xocean:coral_orange"})
 	end,

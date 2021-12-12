@@ -12,8 +12,9 @@ local function add_metamorphosis_report(node_name, report)
 end
 
 function half_time_calc(interval, chance, treshold)
-  local steps = math.log(1/(interval+1))/math.log((chance-1)/chance)
-  return math.floor(steps*interval/360+0.5)/10
+  local steps = math.log(0.5)/math.log((chance-1)/chance)
+  -- 1.41 like calculation error compensation for param_treshold 15
+  return math.floor(1.41*(treshold+1)*steps*interval/360+0.5)/10
 end
 
 local param_treshold = 15 
@@ -28,7 +29,7 @@ minetest.register_abm({
   action = function(pos, node)
     if (minetest.find_node_near(pos, 1, {"group:air"}) == nil) then
       node.param1 = node.param1 + 1;
-      if (node.param1>=param_treshold) then
+      if (node.param1>param_treshold) then
         minetest.set_node(pos, {name="hades_xocean:ocean_stone"})
       else
         minetest.swap_node(pos, node)
@@ -99,6 +100,22 @@ local coral_skeletons = {
   ["hades_xocean:fire"]="hades_xocean:skeleton_fire",
   ["hades_xocean:tube_block"]="hades_xocean:tube_skeleton",
   ["hades_xocean:coral_cyan"]="hades_xocean:skeleton_tube",
+  -- aquaz support
+  ["hades_aquaz:rhodophyta_base"]="hades_aquaz:rhodophyta_base_skeleton",
+  ["hades_aquaz:psammocora_base"]="hades_aquaz:psammocora_base_skeleton",
+  ["hades_aquaz:sarcophyton_base"]="hades_aquaz:sarcophyton_base_skeleton",
+  ["hades_aquaz:carnation_base"]="hades_aquaz:carnation_base_skeleton",
+  ["hades_aquaz:fiery_red_base"]="hades_aquaz:fiery_red_base_skeleton",
+  ["hades_aquaz:acropora_base"]="hades_aquaz:acropora_base_skeleton",
+  ["hades_aquaz:rhodophyta"]="hades_aquaz:rhodophyta_skeleton",
+  ["hades_aquaz:psammocora"]="hades_aquaz:psammocora_skeleton",
+  ["hades_aquaz:sarcophyton"]="hades_aquaz:sarcophyton_skeleton",
+  ["hades_aquaz:carnation"]="hades_aquaz:carnation_skeleton",
+  ["hades_aquaz:fiery_red"]="hades_aquaz:fiery_red_skeleton",
+  ["hades_aquaz:acropora"]="hades_aquaz:acropora_skeleton",
+  ["hades_aquaz:pink_birdnest_coral"]="hades_aquaz:pink_birdnest_coral_skeleton",
+  ["hades_aquaz:sea_blade_coral"]="hades_aquaz:sea_blade_coral_skeleton",
+  --["hades_aquaz:"]="hades_aquaz:_skeleton",
 }
 local check_pos = {
   {x = 0, y =1, z = 0},
@@ -151,6 +168,17 @@ local coral_grow = {
   ["hades_xocean:horn"]="hades_xocean:coral_brown",
   ["hades_xocean:fire"]="hades_xocean:coral_orange",
   ["hades_xocean:coral_cyan"]="hades_xocean:tube_block",
+  -- hades_aquaz support
+  ["hades_aquaz:rhodophyta"]="hades_aquaz:rhodophyta_base",
+  ["hades_aquaz:psammocora"]="hades_aquaz:psammocora_base",
+  ["hades_aquaz:sarcophyton"]="hades_aquaz:sarcophyton_base",
+  ["hades_aquaz:carnation"]="hades_aquaz:carnation_base",
+  ["hades_aquaz:fiery_red"]="hades_aquaz:fiery_red_base",
+  ["hades_aquaz:acropora"]="hades_aquaz:acropora_base",
+  ["hades_aquaz:aquamarine_coral"]="hades_aquaz:aquamarine_base",
+  ["hades_aquaz:pink_birdnest_coral"]="hades_xocean:brain_skeleton",
+  ["hades_aquaz:sea_blade_coral"]="hades_xocean:bubble_skeleton",
+  --["hades_aquaz:"]="hades_aquaz:_base",
 }
 local coral_param_treshold = 31 
 local function find_grow_pos(pos)
@@ -208,13 +236,53 @@ minetest.register_abm({
   end,
 })
 
+-- grow coral block
+local coral_block_grow = {
+  ["hades_xocean:brain_block"]="hades_xocean:coral_pink",
+  ["hades_xocean:bubble_block"]="hades_xocean:bubble",
+  ["hades_xocean:coral_brown"]="hades_xocean:horn",
+  ["hades_xocean:coral_orange"]="hades_xocean:fire",
+  ["hades_xocean:tube_block"]="hades_xocean:coral_cyan",
+  -- hades_aquaz support
+  ["hades_aquaz:rhodophyta_base"]="hades_aquaz:rhodophyta",
+  ["hades_aquaz:psammocora_base"]="hades_aquaz:psammocora",
+  ["hades_aquaz:sarcophyton_base"]="hades_aquaz:sarcophyton",
+  ["hades_aquaz:carnation-base"]="hades_aquaz:carnation",
+  ["hades_aquaz:fiery_red_base"]="hades_aquaz:fiery_red",
+  ["hades_aquaz:acropora_base"]="hades_aquaz:acropora",
+  ["hades_aquaz:aquamarine_base"]="hades_aquaz:aquamarine_coral",
+  ["hades_xocean:brain_skeleton"]="hades_aquaz:pink_birdnest_coral",
+  ["hades_xocean:bubble_skeleton"]="hades_aquaz:sea_blade_coral",
+  --["hades_aquaz:"]="hades_aquaz:_base",
+}
+minetest.register_abm({ 
+  label = "Grow coral block",
+  nodenames = {"group:coral_block_growing"},
+  neighbors = {"hades_core:water_source"},
+  interval = 757,
+  chance = 1499,
+  action = function(pos, node)
+    if (minetest.find_node_near(pos, 1, {"air"}) ~= nil)
+				or (minetest.find_node_near(pos, 1, {"group:water"}) == nil) then
+      return
+    end
+    local dir = find_grow_pos(pos)
+    if (dir~=nil) then
+      local meta = minetest.get_meta(pos)
+      local new_coral = meta:get("coral_grow_to") or coral_block_grow[node.name]
+      local param2 = minetest.dir_to_wallmounted(vector.subtract(pos, dir))
+      minetest.swap_node(pos, {name=new_coral, param2=param2})
+    end
+  end,
+})
+
 -- grow kelp
 local kelp_light_limit = 2
-local kelp_light_center = 8
+local kelp_light_center = 8.5
 local kelp_param_limit = 6*16
 minetest.register_abm({ 
   label = "Grow kelp",
-  nodenames = {"hades_xocean:sand_with_kelp"},
+  nodenames = {"group:kelp_growing"},
   interval = 46,
   chance = 20,
   action = function(pos, node)
@@ -241,9 +309,10 @@ minetest.register_abm({
     height = math.ceil(node.param2/16)
     above_pos.y = pos.y + height
     local above = minetest.get_node(above_pos)
+    local day_light = node.param1%16
     if  (node.param2<=kelp_param_limit)
         and (above.name=="hades_core:water_source")
-        and ((above.param1%16)>=kelp_light_limit) then
+        and (day_light>=kelp_light_limit) then
       minetest.swap_node(pos, node)
     else
       -- no space for grow, try to spreed
@@ -253,7 +322,7 @@ minetest.register_abm({
       local pos0 = {x=pos.x-6,y=above_pos.y-8,z=pos.z-6}
       local pos1 = {x=pos.x+6,y=above_pos.y+2,z=pos.z+6}
       
-      local found_pos = minetest.find_nodes_in_area(pos0, pos1, "hades_xocean:sand_with_kelp")
+      local found_pos = minetest.find_nodes_in_area(pos0, pos1, "group:kelp")
       if #found_pos > (((7-math.abs(day_light-kelp_light_center))/7)*144) then
         return
       end
@@ -267,7 +336,7 @@ minetest.register_abm({
         if  (found_node.name=="hades_core:water_source")
             and ((found_node.param1%16)>=kelp_light_limit) then
           found_pos.y = found_pos.y - 1
-          minetest.set_node(found_pos, {name="hades_xocean:sand_with_kelp", param2 = 1})
+          minetest.set_node(found_pos, {name=node.name, param2 = 1})
         end
       end
       
@@ -280,7 +349,7 @@ minetest.register_abm({
 local seagrass_light_limit = 9
 minetest.register_abm({ 
   label = "Grow seagrass",
-  nodenames = {"hades_xocean:seagrass"},
+  nodenames = {"group:seagrass_growing"},
   interval = 45,
   chance = 47,
   action = function(pos, node)
@@ -294,7 +363,7 @@ minetest.register_abm({
       local pos0 = {x=pos.x-6,y=pos.y-8,z=pos.z-6}
       local pos1 = {x=pos.x+6,y=pos.y+2,z=pos.z+6}
       
-      local found_pos = minetest.find_nodes_in_area(pos0, pos1, "hades_xocean:seagrass")
+      local found_pos = minetest.find_nodes_in_area(pos0, pos1, "group:seagrass")
       if #found_pos > (((day_light-seagrass_light_limit+1)/(15-seagrass_light_limit))*144) then
         return
       end
@@ -307,7 +376,7 @@ minetest.register_abm({
         if  (found_node.name=="hades_core:water_source")
             and ((found_node.param1%16)>=seagrass_light_limit) then
           found_pos.y = found_pos.y - 1
-          minetest.set_node(found_pos, {name="hades_xocean:seagrass"})
+          minetest.set_node(found_pos, {name=node.name})
         end
       end
     else
@@ -316,3 +385,4 @@ minetest.register_abm({
     end
   end,
 })
+

@@ -24,10 +24,10 @@ minetest.register_abm({
   label = "Create ocean stone",
   nodenames = {"hades_default:silver_sandstone"},
   neighbors = {"group:water"},
-  interval = 389,
-  chance = 3727,
+  interval = 257,
+  chance = 122,
   action = function(pos, node)
-    if (minetest.find_node_near(pos, 1, {"group:air"}) == nil) then
+    if (minetest.find_node_near(pos, 1, {"air"}) == nil) then
       node.param1 = node.param1 + 1;
       if (node.param1>param_treshold) then
         minetest.set_node(pos, {name="hades_xocean:ocean_stone"})
@@ -39,7 +39,7 @@ minetest.register_abm({
 })
 
 add_metamorphosis_report("hades_default:silver_sandstone",
-    string.format(S("Silver sandstone metamorphoses into ocean stone. It requires contact with water and without air. Half-metamorphose time is %i hours."),half_time_calc(389, 3727, param_treshold))
+    string.format(S("Silver sandstone metamorphoses into ocean stone. It requires contact with water and without air. Half-metamorphose time is %i hours."),half_time_calc(257, 122, param_treshold+1))
   )
 
 add_metamorphosis_report("hades_xocean:ocean_stone", 
@@ -199,8 +199,8 @@ minetest.register_abm({
   label = "Grow coral",
   nodenames = {"group:coral_growing"},
   neighbors = {"hades_core:water_source"},
-  interval = 677,
-  chance = 1109,
+  interval = 373,
+  chance = 109,
   action = function(pos, node)
     if (minetest.find_node_near(pos, 1, {"air"}) ~= nil)
 				or (minetest.find_node_near(pos, 1, {"group:water"}) == nil) then
@@ -260,7 +260,7 @@ minetest.register_abm({
   nodenames = {"group:coral_block_growing"},
   neighbors = {"hades_core:water_source"},
   interval = 757,
-  chance = 1499,
+  chance = 499,
   action = function(pos, node)
     if (minetest.find_node_near(pos, 1, {"air"}) ~= nil)
 				or (minetest.find_node_near(pos, 1, {"group:water"}) == nil) then
@@ -323,7 +323,7 @@ minetest.register_abm({
       local pos1 = {x=pos.x+6,y=above_pos.y+2,z=pos.z+6}
       
       local found_pos = minetest.find_nodes_in_area(pos0, pos1, "group:kelp")
-      if #found_pos > (((7-math.abs(day_light-kelp_light_center))/7)*144) then
+      if #found_pos > (((7-math.abs(day_light-kelp_light_center))/7)*72) then
         return
       end
       
@@ -363,8 +363,8 @@ minetest.register_abm({
       local pos0 = {x=pos.x-6,y=pos.y-8,z=pos.z-6}
       local pos1 = {x=pos.x+6,y=pos.y+2,z=pos.z+6}
       
-      local found_pos = minetest.find_nodes_in_area(pos0, pos1, "group:seagrass")
-      if #found_pos > (((day_light-seagrass_light_limit+1)/(15-seagrass_light_limit))*144) then
+      local found_pos = minetest.find_nodes_in_area(pos0, pos1, "group:seaplant")
+      if #found_pos > (((day_light-seagrass_light_limit+1)/(15-seagrass_light_limit))*72) then
         return
       end
       
@@ -381,6 +381,44 @@ minetest.register_abm({
       end
     else
       -- die (no water, no light)
+      minetest.set_node(pos, {name="hades_default:sand"})
+    end
+  end,
+})
+
+-- grow pickle
+
+minetest.register_abm({ 
+  label = "Grow pickle",
+  nodenames = {"group:pickle_growing"},
+  interval = 79,
+  chance = 137,
+  action = function(pos, node)
+    pos.y = pos.y + 1
+    local node_above = minetest.get_node(pos)
+    pos.y = pos.y - 1
+    if  (node_above.name=="hades_core:water_source") then
+      -- spreed
+      local pos0 = {x=pos.x-6,y=pos.y-8,z=pos.z-6}
+      local pos1 = {x=pos.x+6,y=pos.y+2,z=pos.z+6}
+      
+      local found_pos = minetest.find_nodes_in_area(pos0, pos1, "group:pickle")
+      if #found_pos > 16 then
+        return
+      end
+      
+      found_pos = minetest.find_nodes_in_area(pos0, pos1, "hades_default:sand")
+      if #found_pos > 0 then
+        found_pos = found_pos[math.random(#found_pos)]
+        found_pos.y = found_pos.y + 1
+        local found_node = minetest.get_node(found_pos)
+        if  (found_node.name=="hades_core:water_source") then
+          found_pos.y = found_pos.y - 1
+          minetest.set_node(found_pos, {name=node.name})
+        end
+      end
+    else
+      -- die (no water)
       minetest.set_node(pos, {name="hades_default:sand"})
     end
   end,

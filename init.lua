@@ -1897,5 +1897,7 @@ mobs:register_mob("hades_xocean:fish4", {
 		})
 end
 
+dofile(modpath.."/command.lua")
+
 -- Let the server console know the initialization is done
 core.log("[Xocean] Initialization is complete.")

@@ -10,7 +10,7 @@ hades_xocean = {
 }
 
 function hades_xocean.add_fish(fish_name)
-  fishes[fish_name] = true
+  hades_xocean.fishes[fish_name] = true
 end
 
 minetest.register_privilege("xocean_fix_fish", {

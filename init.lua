@@ -1728,6 +1728,7 @@ mobs:register_mob("hades_xocean:fish", {
 		follow = {"hades_waterplants:seaweed", "hades_waterplants:waterlily",
 			"hades_xocean:sand_with_kelp", "hades_xocean:seagrass",
 			"hades_aquaz:grass", "hades_aquaz:tall_grass",
+			"hades_aquaz:purple_alga", "hades_aquaz:orange_alga", "hades_aquaz:red_alga", "hades_aquaz:algae_feed",
 		},
 		on_rightclick = function(self, clicker)
 			if mobs:feed_tame(self, clicker, 4, true, true) then return end
@@ -1780,6 +1781,7 @@ mobs:register_mob("hades_xocean:fish2", {
 		follow = {"hades_waterplants:seaweed", "hades_waterplants:waterlily",
 			"hades_xocean:sand_with_kelp", "hades_xocean:seagrass",
 			"hades_aquaz:grass", "hades_aquaz:tall_grass",
+			"hades_aquaz:purple_alga", "hades_aquaz:orange_alga", "hades_aquaz:red_alga", "hades_aquaz:algae_feed",
 		},
 		on_rightclick = function(self, clicker)
 			if mobs:feed_tame(self, clicker, 4, true, true) then return end
@@ -1832,6 +1834,7 @@ mobs:register_mob("hades_xocean:fish3", {
 		follow = {"hades_waterplants:seaweed", "hades_waterplants:waterlily",
 			"hades_xocean:sand_with_kelp", "hades_xocean:seagrass",
 			"hades_aquaz:grass", "hades_aquaz:tall_grass",
+			"hades_aquaz:purple_alga", "hades_aquaz:orange_alga", "hades_aquaz:red_alga", "hades_aquaz:algae_feed",
 		},
 		on_rightclick = function(self, clicker)
 			if mobs:feed_tame(self, clicker, 4, true, true) then return end
@@ -1884,6 +1887,7 @@ mobs:register_mob("hades_xocean:fish4", {
 		follow = {"hades_waterplants:seaweed", "hades_waterplants:waterlily",
 			"hades_xocean:sand_with_kelp", "hades_xocean:seagrass",
 			"hades_aquaz:grass", "hades_aquaz:tall_grass",
+			"hades_aquaz:purple_alga", "hades_aquaz:orange_alga", "hades_aquaz:red_alga", "hades_aquaz:algae_feed",
 		},
 		on_rightclick = function(self, clicker)
 			if mobs:feed_tame(self, clicker, 4, true, true) then return end

@@ -1755,7 +1755,7 @@ mobs:register_mob("hades_xocean:fish2", {
 			{"mobs_fishy6.png"}
 		},
 		drops = {
-				{name = "hades_xocean:fish_edible", chance = 2, min = 1, max = 2},
+				{name = "hades_xocean:fish_edible", chance = 1, min = 1, max = 1},
 		},
 		makes_footstep_sound = false,
 		walk_velocity = 2,
@@ -1808,7 +1808,7 @@ mobs:register_mob("hades_xocean:fish3", {
 			{"mobs_fishy9.png"}
 		},
 		drops = {
-				{name = "hades_xocean:fish_edible", chance = 2, min = 1, max = 2},
+				{name = "hades_xocean:fish_edible", chance = 1, min = 1, max = 1},
 		},
 		makes_footstep_sound = false,
 		walk_velocity = 2,
@@ -1861,7 +1861,7 @@ mobs:register_mob("hades_xocean:fish4", {
 			{"mobs_fishy12.png"}
 		},
 		drops = {
-				{name = "hades_xocean:fish_edible", chance = 2, min = 1, max = 2},
+				{name = "hades_xocean:fish_edible", chance = 1, min = 1, max = 1},
 		},
 		makes_footstep_sound = false,
 		walk_velocity = 2,

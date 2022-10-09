@@ -2,7 +2,7 @@
 hades_xocean = {
   fishes = {
     ["hades_xocean:dolphin"] = true,
-    ["hades_xocean:fish1"] = true,
+    ["hades_xocean:fish"] = true,
     ["hades_xocean:fish2"] = true,
     ["hades_xocean:fish3"] = true,
     ["hades_xocean:fish4"] = true,
